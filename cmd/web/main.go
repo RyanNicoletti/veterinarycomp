@@ -3,13 +3,17 @@ package main
 import (
 	"log"
 	"net/http"
-	"veterinarycomp/internal/config"
-	"veterinarycomp/internal/handlers"
-	"veterinarycomp/internal/render"
+
+	"github.com/ryannicoletti/veterinarycomp/internal/config"
+	"github.com/ryannicoletti/veterinarycomp/internal/handlers"
+	"github.com/ryannicoletti/veterinarycomp/internal/render"
 )
 
+const portNumber = ":8080"
+
+var app config.AppConfig
+
 func main() {
-	var app config.AppConfig
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache", err)
@@ -19,7 +23,12 @@ func main() {
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
-	http.HandleFunc("/", repo.Home)
-	http.HandleFunc("/about", repo.About)
-	http.ListenAndServe(":8080", nil)
+
+	serve := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+
+	err = serve.ListenAndServe()
+	log.Fatal(err)
 }

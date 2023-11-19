@@ -3,8 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"veterinarycomp/internal/config"
-	"veterinarycomp/internal/render"
+	"github.com/ryannicoletti/veterinarycomp/internal/config"
+	"github.com/ryannicoletti/veterinarycomp/internal/render"
+	"github.com/ryannicoletti/veterinarycomp/models"
 )
 
 var Repo *Repository
@@ -24,13 +25,13 @@ func NewHandlers(r *Repository) {
 }
 
 func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl")
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl")
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{})
 }
 
 func (repo *Repository) AddComp(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "add-comp.page.tmpl")
+	render.RenderTemplate(w, "add-comp.page.tmpl", &models.TemplateData{})
 }

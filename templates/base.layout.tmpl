@@ -1,21 +1,27 @@
 {{define "base"}}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
-</head>
-<body>
+    {{block "css" .}}
+    {{
+      end
+    }}
+  </head>
+  <body>
     <nav>
-	<a href="/">Home</a>
-	<a href="/about">About</a>
-</nav>
- {{block "content" .}}
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </nav>
+    {{block "content" .}}
 
- {{end}}
- <footer><p>&copy; 2023 vetcomp. All rights reserved.</p></footer>
-</body>
+    {{ end }}
+    <footer><p>&copy; 2023 vetcomp. All rights reserved.</p></footer>
+    {{block "js" .}}
+    {{ end }}
+  </body>
 </html>
 
-{{end}}
+{{ end }}
