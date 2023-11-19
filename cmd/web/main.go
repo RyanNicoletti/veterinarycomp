@@ -8,6 +8,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
+	"github.com/ryannicoletti/veterinarycomp/internal/driver"
 	"github.com/ryannicoletti/veterinarycomp/internal/handlers"
 	"github.com/ryannicoletti/veterinarycomp/internal/render"
 )
@@ -18,7 +19,27 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	db, err := start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.SQL.Close()
+
+	server := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+
+	fmt.Printf("Listening on port %s\n", portNumber)
+	err = server.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func start() (*driver.DB, error) {
 	app.IsProduction = false
+
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -27,23 +48,25 @@ func main() {
 
 	app.Session = session
 
+	log.Println("Connecting to database...")
+
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=vetcomp user=ryannicoletti password=")
+	if err != nil {
+		fmt.Println("Failed to connect to db, ggs...")
+	}
+	log.Println("Successfully connected to database.")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		log.Fatal("cannot create template cache", err)
+		log.Fatal("Failed to create template cache", err)
 	}
 	app.TemplateCache = tc
+	// change to true when in prod
 	app.UseCache = false
-	repo := handlers.CreateNewRepo(&app)
+
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 
-	serve := &http.Server{
-		Addr:    portNumber,
-		Handler: routes(&app),
-	}
-	fmt.Printf("Listening on port %s\n", portNumber)
-	err = serve.ListenAndServe()
-	if err != nil {
-		log.Fatal(err)
-	}
+	return db, nil
 }
