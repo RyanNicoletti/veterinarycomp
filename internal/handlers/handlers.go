@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
+	"github.com/ryannicoletti/veterinarycomp/internal/models"
 	"github.com/ryannicoletti/veterinarycomp/internal/render"
-	"github.com/ryannicoletti/veterinarycomp/models"
 )
 
 var Repo *Repository
@@ -14,7 +14,7 @@ type Repository struct {
 	App *config.AppConfig
 }
 
-func NewRepo(a *config.AppConfig) *Repository {
+func CreateNewRepo(a *config.AppConfig) *Repository {
 	return &Repository{
 		App: a,
 	}
@@ -25,6 +25,8 @@ func NewHandlers(r *Repository) {
 }
 
 func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	remoteIp := r.RemoteAddr
+	repo.App.Session.Put(r.Context(), "remote_ip", remoteIp)
 	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 

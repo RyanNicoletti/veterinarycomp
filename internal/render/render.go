@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
-	"github.com/ryannicoletti/veterinarycomp/models"
+	"github.com/ryannicoletti/veterinarycomp/internal/models"
 )
 
 var app *config.AppConfig
