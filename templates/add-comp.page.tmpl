@@ -1,1 +1,107 @@
-<div> add comp</div>
+{{template "base" .}}
+{{define "content"}}
+
+<div>
+  <form action="/add-comp" method="post" novalidate class="needs-validation">
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+    <label for="company-name">Hospital/Company Name: </label>
+    <input
+      required
+      type="text"
+      name="company-name"
+      placeholder="Banfield Pet Hospital"
+    />
+    <label for="job-title">Title: </label>
+    <input
+      required
+      type="text"
+      name="job-title"
+      placeholder="Associate Veterinarian"
+    />
+    <label for="type-of-practice">Type of Practice:</label>
+    <select
+      id="type-of-practice"
+      name="type-of-practice"
+      required
+      onchange="toggleSpecializationInput()"
+    >
+      <option value="small_animal_medicine_and_surgery">
+        Small Animal Medicine and Surgery
+      </option>
+      <option value="equine_medicine">Equine Medicine</option>
+      <option value="equine_surgery">Equine Surgery</option>
+      <option value="shelter_medicine">Shelter Medicine</option>
+      <option value="specialization">Specialization (small animal)</option>
+      <option value="specialization">Specialization: (large animal)</option>
+    </select>
+
+    <div style="display: none" id="specialization_input">
+      <label for="board_certification">Board Certification:</label>
+      <input type="text" id="board_certification" name="board_certification" />
+    </div>
+
+    <br />
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" required /><br />
+
+    <label for="years_of_experience">Years of Experience:</label>
+    <input
+      type="text"
+      inputmode="numeric"
+      id="years_of_experience"
+      name="years_of_experience"
+    /><br />
+
+    <label for="base_salary">Base Salary:</label>
+    <input
+      type="text"
+      inputmode="numeric"
+      id="base_salary"
+      name="base_salary"
+    /><br />
+
+    <label for="sign_on_bonus">Sign-on Bonus:</label>
+    <input
+      type="text"
+      inputmode="numeric"
+      id="sign_on_bonus"
+      name="sign_on_bonus"
+    /><br />
+
+    <label for="production_salary">Production Salary:</label>
+    <input
+      type="text"
+      inputmode="numeric"
+      id="production_salary"
+      name="production_salary"
+    /><br />
+
+    <label for="verification_document">Verification Document:</label>
+    <input
+      type="file"
+      id="verification_document"
+      name="verification_document"
+    /><br />
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+{{ end }}
+
+{{define "js"}}
+<script>
+  function toggleSpecializationInput() {
+    var typeOfPracticeSelect = document.getElementById("type-of-practice");
+    var specializationInput = document.getElementById("specialization_input");
+    if (typeOfPracticeSelect.value === "specialization") {
+      console.log(typeOfPracticeSelect.value);
+      specializationInput.style.display = "block";
+    } else {
+      console.log(typeOfPracticeSelect.value);
+      specializationInput.style.display = "none";
+    }
+  }
+</script>
+{{ end }}
