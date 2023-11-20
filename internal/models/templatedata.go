@@ -6,4 +6,5 @@ type TemplateData struct {
 	FlashMessage string
 	Warning      string
 	Error        string
+	CSRFToken    string
 }

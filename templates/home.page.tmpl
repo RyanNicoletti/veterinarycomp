@@ -1,23 +1,39 @@
 {{template "base" .}}
 {{define "content"}}
-<table>
-  <tr>
-    <th>Company/Hospital</th>
-    <th>
-      Job Title
-      <div>(type of practice)</div>
-    </th>
-    <th>Years of Experience</th>
-    <th>Total Compensation (USD)</th>
-  </tr>
+<link rel="stylesheet" type="text/css" href="/static/css/home.css" />
+<div class="container">
+  <div class="table-actions">
+    <div>
+      <input
+        type="search"
+        id="comp-search"
+        placeholder="Search by location, hospital, etc..."
+      />
+      <button>Search</button>
+    </div>
+    <div>
+      <button>Add Compensation</button>
+    </div>
+  </div>
+  <table class="comp-table">
+    <tr>
+      <th>Company/Hospital</th>
+      <th>
+        Job Title
+        <div>(type of practice)</div>
+      </th>
+      <th>Years of Experience</th>
+      <th>Total Compensation (USD)</th>
+    </tr>
 
-  <tr>
-    <td></td>
-    <td>
-      <div></div>
-    </td>
-    <td></td>
-    <td></td>
-  </tr>
-</table>
+    <tr>
+      <td></td>
+      <td>
+        <div></div>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
 {{ end }}

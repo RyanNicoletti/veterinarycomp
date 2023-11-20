@@ -32,13 +32,13 @@ func NewHandlers(r *Repository) {
 func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIp := r.RemoteAddr
 	repo.App.Session.Put(r.Context(), "remote_ip", remoteIp)
-	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "about.page.tmpl", &models.TemplateData{})
 }
 
 func (repo *Repository) AddComp(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "add-comp.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "add-comp.page.tmpl", &models.TemplateData{})
 }
