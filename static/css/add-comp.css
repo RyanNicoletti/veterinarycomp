@@ -1,0 +1,62 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+}
+fieldset {
+  border: none;
+}
+.fieldset-label {
+  display: inline-block;
+  font-size: 1.2em;
+  border-bottom: 2px solid rgb(130, 130, 130);
+  margin: 15px 0 10px 0;
+}
+form {
+  /* border: 1px solid rgb(170, 170, 170);
+  border-radius: 5px; */
+  padding: 20px 20px 0 20px;
+  margin-top: 50px;
+  width: 40vw;
+  /* background-color: rgb(185, 215, 249); */
+}
+form > div {
+  margin-bottom: 20px;
+}
+
+input {
+  border-radius: 5px;
+  margin: 6px 0 10px 0;
+  background: #fff;
+  border: 1px solid #c6c7cc;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+  padding: 6px;
+  width: 50%;
+  background: #fafbfc;
+}
+label {
+  color: rgb(57, 88, 112);
+  font-weight: bold;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+}
+.additional-salary-btn-container {
+  margin-bottom: 10px;
+}
+.additional-salary-btn {
+  margin-right: 10px;
+}
+.add-comp-submit-btn {
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 5px;
+  background-color: #fff;
+}

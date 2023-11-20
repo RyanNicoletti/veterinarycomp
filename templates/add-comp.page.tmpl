@@ -1,90 +1,132 @@
 {{template "base" .}}
 {{define "content"}}
+<link rel="stylesheet" type="text/css" href="/static/css/add-comp.css" />
 
-<div>
+<div class="form-container">
   <form action="/add-comp" method="post" novalidate class="needs-validation">
-    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-    <label for="company-name">Hospital/Company Name: </label>
-    <input
-      required
-      type="text"
-      name="company-name"
-      placeholder="Banfield Pet Hospital"
-    />
-    <label for="job-title">Title: </label>
-    <input
-      required
-      type="text"
-      name="job-title"
-      placeholder="Associate Veterinarian"
-    />
-    <label for="type-of-practice">Type of Practice:</label>
-    <select
-      id="type-of-practice"
-      name="type-of-practice"
-      required
-      onchange="toggleSpecializationInput()"
-    >
-      <option value="small_animal_medicine_and_surgery">
-        Small Animal Medicine and Surgery
-      </option>
-      <option value="equine_medicine">Equine Medicine</option>
-      <option value="equine_surgery">Equine Surgery</option>
-      <option value="shelter_medicine">Shelter Medicine</option>
-      <option value="specialization">Specialization (small animal)</option>
-      <option value="specialization">Specialization: (large animal)</option>
-    </select>
+    <fieldset class="company-hospital-info">
+      <div class="fieldset-label">Hospital/Company Information</div>
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+      <div>
+        <label for="company-name">Hospital/Company Name: </label>
+        <input
+          required
+          type="text"
+          name="company-name"
+          placeholder="Banfield Pet Hospital"
+        />
+      </div>
+      <div>
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required /><br />
+      </div>
+    </fieldset>
+    <fieldset class="job-info">
+      <div class="fieldset-label">Job Information</div>
+      <div>
+        <label for="job-title">Title: </label>
+        <input
+          required
+          type="text"
+          name="job-title"
+          placeholder="Associate Veterinarian"
+        />
+      </div>
+      <div>
+        <label for="type-of-practice">Type of Practice:</label>
+        <select
+          id="type-of-practice"
+          name="type-of-practice"
+          required
+          onchange="toggleSpecializationInput()"
+        >
+          <option value="small_animal_medicine_and_surgery">
+            Small Animal Medicine and Surgery
+          </option>
+          <option value="equine_medicine">Equine Medicine</option>
+          <option value="equine_surgery">Equine Surgery</option>
+          <option value="shelter_medicine">Shelter Medicine</option>
+          <option value="specialization">Specialization (small animal)</option>
+          <option value="specialization">Specialization: (large animal)</option>
+        </select>
+      </div>
 
-    <div style="display: none" id="specialization_input">
-      <label for="board_certification">Board Certification:</label>
-      <input type="text" id="board_certification" name="board_certification" />
+      <div style="display: none" id="specialization_input">
+        <label for="board_certification">Board Certification:</label>
+        <input
+          type="text"
+          id="board_certification"
+          name="board_certification"
+        />
+      </div>
+    </fieldset>
+    <fieldset class="experience-salary-info">
+      <div class="fieldset-label">Experience and Salary Information</div>
+      <div>
+        <label for="years-experience">Years of Experience:</label>
+        <input
+          type="text"
+          inputmode="numeric"
+          id="years-experience"
+          name="years-experience"
+        />
+      </div>
+      <div id="base-salary-input">
+        <label for="base-salary">Base Salary:</label>
+        <input
+          type="text"
+          inputmode="numeric"
+          id="base-salary"
+          name="base-salary"
+        />
+      </div>
+      <div class="additional-salary-btn-container">
+        <button
+          type="button"
+          onclick="toggleSalaryElements('sign-on-bonus')"
+          class="additional-salary-btn"
+        >
+          Add Sign On Bonus</button
+        ><button
+          type="button"
+          onclick="toggleSalaryElements('production')"
+          class="additional-salary-btn"
+        >
+          Add Production
+        </button>
+      </div>
+      <div id="sign-on-bonus" style="display: none">
+        <label for="sign-on-bonus">Sign-on Bonus:</label>
+        <input
+          type="text"
+          inputmode="numeric"
+          id="sign-on-bonus"
+          name="sign-on-bonus"
+        />
+      </div>
+      <div id="production" style="display: none">
+        <label for="production">Production:</label>
+        <input
+          type="text"
+          inputmode="numeric"
+          id="production"
+          name="production"
+        />
+      </div>
+    </fieldset>
+    <fieldset class="verification-info">
+      <div>
+        <label for="verification-document">Upload Verification:</label>
+        <input
+          type="file"
+          id="verification-document"
+          name="verification-document"
+        />
+      </div>
+    </fieldset>
+    <div>
+      <button type="submit" class="add-comp-submit-btn">Submit</button>
     </div>
-
-    <br />
-
-    <label for="location">Location:</label>
-    <input type="text" id="location" name="location" required /><br />
-
-    <label for="years_of_experience">Years of Experience:</label>
-    <input
-      type="text"
-      inputmode="numeric"
-      id="years_of_experience"
-      name="years_of_experience"
-    /><br />
-
-    <label for="base_salary">Base Salary:</label>
-    <input
-      type="text"
-      inputmode="numeric"
-      id="base_salary"
-      name="base_salary"
-    /><br />
-
-    <label for="sign_on_bonus">Sign-on Bonus:</label>
-    <input
-      type="text"
-      inputmode="numeric"
-      id="sign_on_bonus"
-      name="sign_on_bonus"
-    /><br />
-
-    <label for="production_salary">Production Salary:</label>
-    <input
-      type="text"
-      inputmode="numeric"
-      id="production_salary"
-      name="production_salary"
-    /><br />
-
-    <label for="verification_document">Verification Document:</label>
-    <input
-      type="file"
-      id="verification_document"
-      name="verification_document"
-    /><br />
-
-    <button type="submit">Submit</button>
   </form>
 </div>
 
@@ -93,14 +135,20 @@
 {{define "js"}}
 <script>
   function toggleSpecializationInput() {
-    var typeOfPracticeSelect = document.getElementById("type-of-practice");
-    var specializationInput = document.getElementById("specialization_input");
+    const typeOfPracticeSelect = document.getElementById("type-of-practice");
+    const specializationInput = document.getElementById("specialization_input");
     if (typeOfPracticeSelect.value === "specialization") {
-      console.log(typeOfPracticeSelect.value);
       specializationInput.style.display = "block";
     } else {
-      console.log(typeOfPracticeSelect.value);
       specializationInput.style.display = "none";
+    }
+  }
+  function toggleSalaryElements(elementIdToToggle) {
+    const elementToToggle = document.getElementById(elementIdToToggle);
+    if (elementToToggle.style.display === "none") {
+      elementToToggle.style.display = "block";
+    } else {
+      elementToToggle.style.display = "none";
     }
   }
 </script>
