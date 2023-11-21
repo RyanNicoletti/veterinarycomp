@@ -1,5 +1,7 @@
 package models
 
+import "github.com/ryannicoletti/veterinarycomp/internal/forms"
+
 // holds data send from handlers to templates
 type TemplateData struct {
 	Data         map[string]interface{}
@@ -7,4 +9,5 @@ type TemplateData struct {
 	Warning      string
 	Error        string
 	CSRFToken    string
+	Form         *forms.Form
 }

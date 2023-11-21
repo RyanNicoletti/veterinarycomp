@@ -12,8 +12,8 @@ type Compensation struct {
 	YearsExperience      int
 	BaseSalary           float32
 	SignOnBonus          float32
-	ProductionSalary     float32
-	TotalSalary          float32
+	Production           float32
+	TotalCompensation    float64
 	VerificationDocument Document
 	Verified             bool
 	CreatedAt            time.Time

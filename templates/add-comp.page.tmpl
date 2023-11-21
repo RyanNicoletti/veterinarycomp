@@ -3,7 +3,13 @@
 <link rel="stylesheet" type="text/css" href="/static/css/add-comp.css" />
 
 <div class="form-container">
-  <form action="/add-comp" method="post" novalidate class="needs-validation">
+  <form
+    id="add-comp-form"
+    action="/add-comp"
+    method="post"
+    novalidate
+    class="needs-validation"
+  >
     <fieldset class="company-hospital-info">
       <div class="fieldset-label">Hospital/Company Information</div>
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
@@ -37,26 +43,35 @@
         <select
           id="type-of-practice"
           name="type-of-practice"
-          required
           onchange="toggleSpecializationInput()"
         >
           <option value="small_animal_medicine_and_surgery">
-            Small Animal Medicine and Surgery
+            Small Animal Medicine and Surgery (GP)
           </option>
-          <option value="equine_medicine">Equine Medicine</option>
-          <option value="equine_surgery">Equine Surgery</option>
+          <option value="small_animal_medicine">
+            Small Animal Medicine (GP)
+          </option>
+          <option value="equine_ambulatory">Equine Ambulatory</option>
+          <option value="equine_medicine_surgery">
+            Equine Medicine and Surgery
+          </option>
+          <option value="mixed-animal">Mixed Animal</option>
+          <option value="exotics">Exotics</option>
+          <option value="food_animal">Food Animal</option>
           <option value="shelter_medicine">Shelter Medicine</option>
+          <option value="research">Research/Industry</option>
           <option value="specialization">Specialization (small animal)</option>
-          <option value="specialization">Specialization: (large animal)</option>
+          <option value="specialization">Specialization (large animal)</option>
+          <option value="other">Other</option>
         </select>
       </div>
 
       <div style="display: none" id="specialization_input">
-        <label for="board_certification">Board Certification:</label>
+        <label for="board-certification">Board Certification:</label>
         <input
           type="text"
-          id="board_certification"
-          name="board_certification"
+          id="board-certification"
+          name="board-certification"
         />
       </div>
     </fieldset>
@@ -78,6 +93,7 @@
           inputmode="numeric"
           id="base-salary"
           name="base-salary"
+          required
         />
       </div>
       <div class="additional-salary-btn-container">
@@ -151,5 +167,19 @@
       elementToToggle.style.display = "none";
     }
   }
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = document.getElementById("add-comp-form");
+      formData.append("csrf_token", "{{.CSRFToken}}");
+      try {
+        await fetch("/add-comp", { method: "post", body: formData });
+        window.location.href = "/";
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  });
 </script>
 {{ end }}
