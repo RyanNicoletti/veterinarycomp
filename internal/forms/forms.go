@@ -1,6 +1,8 @@
 package forms
 
 import (
+	"io"
+	"mime/multipart"
 	"net/url"
 	"strconv"
 	"strings"
@@ -11,7 +13,7 @@ type Form struct {
 	Errors errors
 }
 
-func New(data url.Values) *Form {
+func NewForm(data url.Values) *Form {
 	return &Form{data, errors(map[string][]string{})}
 }
 
@@ -29,7 +31,12 @@ func (f *Form) StringToFloat(field string) (float64, error) {
 	if value == "" {
 		return 0, nil
 	}
-	return strconv.ParseFloat(value, 64)
+	fieldFloat, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		f.Errors.Add(field, "Enter a number")
+		return 0, nil
+	}
+	return fieldFloat, nil
 }
 
 func (f *Form) StringToInt(field string) (int, error) {
@@ -37,7 +44,28 @@ func (f *Form) StringToInt(field string) (int, error) {
 	if value == "" {
 		return 0, nil
 	}
-	return strconv.Atoi(value)
+	fieldInt, err := strconv.Atoi(value)
+	if err != nil {
+		f.Errors.Add(field, "Enter a number")
+		return 0, nil
+	}
+	return fieldInt, nil
+}
+
+func (f *Form) ProcessFileUpload(fieldName string, fileHeader *multipart.FileHeader) ([]byte, error) {
+	file, err := fileHeader.Open()
+	if err != nil {
+		f.Errors.Add(fieldName, "Error opening file")
+		return nil, err
+	}
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		f.Errors.Add(fieldName, "Error reading file")
+		return nil, err
+	}
+
+	return data, nil
 }
 
 func (f *Form) Valid() bool {

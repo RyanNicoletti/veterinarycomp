@@ -3,48 +3,64 @@
 <link rel="stylesheet" type="text/css" href="/static/css/add-comp.css" />
 
 <div class="form-container">
+  {{$comp := index .Data "compensation"}}
   <form
     id="add-comp-form"
-    action="/add-comp"
     method="post"
+    action="/add-comp"
     novalidate
     class="needs-validation"
-  >
+    enctype="multipart/form-data">
     <fieldset class="company-hospital-info">
       <div class="fieldset-label">Hospital/Company Information</div>
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-      <div>
-        <label for="company-name">Hospital/Company Name: </label>
-        <input
-          required
-          type="text"
-          name="company-name"
-          placeholder="Banfield Pet Hospital"
-        />
+      <div class="form-group">
+        <label for="company-name"
+          >Hospital/Company Name:{{with .Form.Errors.Get "company-name"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}
+        </label>
+        <!-- prettier-ignore -->
+        <input required type="text" name="company-name" placeholder="Banfield Pet Hospital" 
+        class="{{with .Form.Errors.Get "company-name"}} is-invalid {{ end }}"
+        value="{{$comp.CompanyName}}" />
       </div>
-      <div>
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required /><br />
+      <div class="form-group">
+        <label for="location"
+          >Location: {{with .Form.Errors.Get "location"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label
+        >
+        <input type="text" id="location" name="location" required class="{{with .Form.Errors.Get "location"}}
+        is-invalid {{ end }}"
+        value="{{$comp.Location}}" />
       </div>
     </fieldset>
     <fieldset class="job-info">
       <div class="fieldset-label">Job Information</div>
-      <div>
-        <label for="job-title">Title: </label>
-        <input
-          required
-          type="text"
-          name="job-title"
-          placeholder="Associate Veterinarian"
-        />
+      <div class="form-group">
+        <label for="job-title"
+          >Title: {{with .Form.Errors.Get "job-title"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label
+        >
+        <input required type="text" name="job-title" placeholder="Associate
+        Veterinarian" class="{{with .Form.Errors.Get "job-title"}} is-invalid
+        {{ end }}"  value="{{$comp.JobTitle}}"/>
       </div>
-      <div>
-        <label for="type-of-practice">Type of Practice:</label>
+      <div class="form-group">
+        <label for="type-of-practice" class="practice-type-label"
+          >Type of Practice: {{with .Form.Errors.Get "type-of-practice"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label
+        >
         <select
           id="type-of-practice"
           name="type-of-practice"
           onchange="toggleSpecializationInput()"
-        >
+          value="{{$comp.PracticeType}}"
+          class="{{with .Form.Errors.Get "type-of-practice"}} is-invalid
+        {{ end }}">
           <option value="small_animal_medicine_and_surgery">
             Small Animal Medicine and Surgery (GP)
           </option>
@@ -66,78 +82,93 @@
         </select>
       </div>
 
-      <div style="display: none" id="specialization_input">
-        <label for="board-certification">Board Certification:</label>
+      <div style="display: none" id="specialization-input">
+        <label for="board-certification">Board Certification: {{with .Form.Errors.Get "specialization-input"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label>
         <input
           type="text"
           id="board-certification"
-          name="board-certification"
-        />
+          name="board-certification" 
+          class="{{with .Form.Errors.Get "specialization-input"}} is-invalid
+        {{ end }}"/>
       </div>
     </fieldset>
     <fieldset class="experience-salary-info">
       <div class="fieldset-label">Experience and Salary Information</div>
-      <div>
-        <label for="years-experience">Years of Experience:</label>
+      <div class="form-group">
+        <label for="years-experience">Years of Experience: {{with .Form.Errors.Get "years-experience"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label>
         <input
           type="text"
           inputmode="numeric"
           id="years-experience"
-          name="years-experience"
-        />
+          name="years-experience" 
+          class="{{with .Form.Errors.Get "years-experience"}} is-invalid
+        {{ end }}"
+        value="{{$comp.YearsExperience}}"/>
       </div>
-      <div id="base-salary-input">
-        <label for="base-salary">Base Salary:</label>
+      <div id="base-salary-input" class="form-group">
+        <label for="base-salary">Base Salary: {{with .Form.Errors.Get "base-salary"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label>
         <input
           type="text"
           inputmode="numeric"
           id="base-salary"
           name="base-salary"
-          required
-        />
+          required 
+          class="{{with .Form.Errors.Get "base-salary"}} is-invalid
+        {{ end }}" value="{{$comp.BaseSalary}}"/>
       </div>
       <div class="additional-salary-btn-container">
         <button
           type="button"
           onclick="toggleSalaryElements('sign-on-bonus')"
-          class="additional-salary-btn"
-        >
+          class="additional-salary-btn">
           Add Sign On Bonus</button
         ><button
           type="button"
           onclick="toggleSalaryElements('production')"
-          class="additional-salary-btn"
-        >
+          class="additional-salary-btn">
           Add Production
         </button>
       </div>
-      <div id="sign-on-bonus" style="display: none">
-        <label for="sign-on-bonus">Sign-on Bonus:</label>
+      <div id="sign-on-bonus" style="display: none" class="form-group">
+        <label for="sign-on-bonus">Sign-on Bonus: {{with .Form.Errors.Get "sign-on-bonus"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label>
         <input
           type="text"
           inputmode="numeric"
           id="sign-on-bonus"
-          name="sign-on-bonus"
-        />
+          name="sign-on-bonus" 
+          class="{{with .Form.Errors.Get "sign-on-bonus"}} is-invalid
+        {{ end }}" value="{{$comp.SignOnBonus}}"/>
       </div>
-      <div id="production" style="display: none">
-        <label for="production">Production:</label>
+      <div id="production" style="display: none" class="form-group">
+        <label for="production">Production: {{with .Form.Errors.Get "production"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label>
         <input
           type="text"
           inputmode="numeric"
           id="production"
-          name="production"
-        />
+          name="production" value="{{$comp.Production}}"/>
       </div>
     </fieldset>
     <fieldset class="verification-info">
-      <div>
-        <label for="verification-document">Upload Verification:</label>
+      <div class="form-group">
+        <label for="verification-document">Upload Verification: {{with .Form.Errors.Get "verification-document"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}</label>
         <input
           type="file"
           id="verification-document"
-          name="verification-document"
-        />
+          name="verification-document" 
+          class="{{with .Form.Errors.Get "verification-document"}} is-invalid
+        {{ end }}" value="{{$comp.VerificationDocument}}" />
       </div>
     </fieldset>
     <div>
@@ -167,19 +198,5 @@
       elementToToggle.style.display = "none";
     }
   }
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form");
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const formData = document.getElementById("add-comp-form");
-      formData.append("csrf_token", "{{.CSRFToken}}");
-      try {
-        await fetch("/add-comp", { method: "post", body: formData });
-        window.location.href = "/";
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
 </script>
 {{ end }}

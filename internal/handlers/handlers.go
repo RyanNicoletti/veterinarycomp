@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"io"
 	"log"
 	"net/http"
 	"time"
@@ -47,51 +46,38 @@ func (repo *Repository) AddComp(w http.ResponseWriter, r *http.Request) {
 	var emptyCompData models.Compensation
 	data := make(map[string]interface{})
 	data["compensation"] = emptyCompData
-	render.Template(w, r, "add-comp.page.tmpl", &models.TemplateData{Form: forms.New(nil), Data: data})
+	render.Template(w, r, "add-comp.page.tmpl", &models.TemplateData{Form: forms.NewForm(nil), Data: data})
 }
 
 func (repo *Repository) PostComp(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
+	err := r.ParseMultipartForm(20 << 30)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	form := forms.New(r.PostForm)
-
-	baseSalary, err := form.StringToFloat("base-salary")
-	if err != nil {
-		log.Println("Error converting base salary to float:", err)
-	}
-	signOnBonus, err := form.StringToFloat("sign-on-bonus")
-	if err != nil {
-		log.Println("Error converting base salary to float:", err)
-	}
-	production, err := form.StringToFloat("production")
-	if err != nil {
-		log.Println("Error converting base salary to float:", err)
-	}
-	yearsExperience, err := form.StringToInt("years-experience")
-	if err != nil {
-		log.Println("Error converting years of experience to int")
-	}
-
+	form := forms.NewForm(r.PostForm)
+	form.Required("company-name", "location", "job-title", "base-salary")
+	baseSalary, _ := form.StringToFloat("base-salary")
+	signOnBonus, _ := form.StringToFloat("sign-on-bonus")
+	production, _ := form.StringToFloat("production")
+	yearsExperience, _ := form.StringToInt("years-experience")
 	totalComp := baseSalary + signOnBonus + production
 
-	file, _, err := r.FormFile("verification-document")
-	if err != nil {
-		form.Errors.Add("document", "error getting verification document from form")
-		log.Println("error getting verification document from form")
+	var document *models.Document
+
+	if files, ok := r.MultipartForm.File["verification-document"]; ok && len(files) > 0 {
+		fileHeader := files[0]
+		verificationData, _ := form.ProcessFileUpload("verification-document", fileHeader)
+		document = &models.Document{
+			Data:        verificationData,
+			FileName:    "verification",
+			ContentType: http.DetectContentType(verificationData),
+			CreatedAt:   time.Now(),
+		}
+
+	} else {
+		document = nil
 	}
-	data, err := io.ReadAll(file)
-	if err != nil {
-		form.Errors.Add("document", "Error reading file for verification document")
-		log.Println("Error reading file for verification document")
-	}
-	document := models.Document{
-		Data:        data,
-		FileName:    "verification",
-		ContentType: http.DetectContentType(data),
-		CreatedAt:   time.Now()}
 
 	compensation := models.Compensation{
 		CompanyName:          r.Form.Get("company-name"),
@@ -109,10 +95,12 @@ func (repo *Repository) PostComp(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:            time.Now(),
 	}
 
-	form.Required("company-name", "location", "job-title", "base-salary")
 	if !form.Valid() {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		data := make(map[string]interface{})
+		data["compensation"] = compensation
+		render.Template(w, r, "add-comp.page.tmpl", &models.TemplateData{Form: form, Data: data})
+		return
 	}
-	repo.App.Session.Put(r.Context(), "compensation", compensation)
-	http.Redirect(w, r, "/home", http.StatusCreated)
+	repo.App.Session.Put(r.Context(), "compensation", compensation) // might not need to put this in a session...
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

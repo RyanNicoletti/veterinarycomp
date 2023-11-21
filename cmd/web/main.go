@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
 	"github.com/ryannicoletti/veterinarycomp/internal/driver"
 	"github.com/ryannicoletti/veterinarycomp/internal/handlers"
+	"github.com/ryannicoletti/veterinarycomp/internal/models"
 	"github.com/ryannicoletti/veterinarycomp/internal/render"
 )
 
@@ -19,6 +21,7 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	gob.Register(models.Compensation{})
 	db, err := start()
 	if err != nil {
 		log.Fatal(err)

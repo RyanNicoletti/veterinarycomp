@@ -14,7 +14,7 @@ type Compensation struct {
 	SignOnBonus          float32
 	Production           float32
 	TotalCompensation    float64
-	VerificationDocument Document
+	VerificationDocument *Document
 	Verified             bool
 	CreatedAt            time.Time
 }
