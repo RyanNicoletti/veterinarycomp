@@ -44,9 +44,10 @@
           <label class="text-danger">{{.}}</label>
           {{ end }}</label
         >
-        <input required type="text" name="job-title" placeholder="Associate
-        Veterinarian" class="{{with .Form.Errors.Get "job-title"}} is-invalid
-        {{ end }}"  value="{{$comp.JobTitle}}"/>
+        <!-- prettier-ignore -->
+        <input required type="text" name="job-title" placeholder="Associate Veterinarian" 
+        class="{{with .Form.Errors.Get "job-title"}} is-invalid {{ end }}"  
+        value="{{$comp.JobTitle}}"/>
       </div>
       <div class="form-group">
         <label for="type-of-practice" class="practice-type-label"
@@ -76,8 +77,8 @@
           <option value="food_animal">Food Animal</option>
           <option value="shelter_medicine">Shelter Medicine</option>
           <option value="research">Research/Industry</option>
-          <option value="specialization">Specialization (small animal)</option>
-          <option value="specialization">Specialization (large animal)</option>
+          <option value="specialization">Specialty Practice (small animal)</option>
+          <option value="specialization">Specialty Practice (large animal)</option>
           <option value="other">Other</option>
         </select>
       </div>
@@ -86,12 +87,14 @@
         <label for="board-certification">Board Certification: {{with .Form.Errors.Get "specialization-input"}}
           <label class="text-danger">{{.}}</label>
           {{ end }}</label>
-        <input
+        <div>
+          <input
           type="text"
           id="board-certification"
           name="board-certification" 
           class="{{with .Form.Errors.Get "specialization-input"}} is-invalid
         {{ end }}"/>
+        </div>
       </div>
     </fieldset>
     <fieldset class="experience-salary-info">
@@ -107,7 +110,8 @@
           name="years-experience" 
           class="{{with .Form.Errors.Get "years-experience"}} is-invalid
         {{ end }}"
-        value="{{$comp.YearsExperience}}"/>
+        value="{{.Form.Get "years-experience"}}"
+        />
       </div>
       <div id="base-salary-input" class="form-group">
         <label for="base-salary">Base Salary: {{with .Form.Errors.Get "base-salary"}}
@@ -119,8 +123,9 @@
           id="base-salary"
           name="base-salary"
           required 
-          class="{{with .Form.Errors.Get "base-salary"}} is-invalid
-        {{ end }}" value="{{$comp.BaseSalary}}"/>
+          class="{{with .Form.Errors.Get "base-salary"}} is-invalid {{ end }}" 
+          value="$ {{.Form.Get "base-salary"}}"
+          oninput="formatMoneyNumbers(this)"/>
       </div>
       <div class="additional-salary-btn-container">
         <button
@@ -139,23 +144,27 @@
         <label for="sign-on-bonus">Sign-on Bonus: {{with .Form.Errors.Get "sign-on-bonus"}}
           <label class="text-danger">{{.}}</label>
           {{ end }}</label>
-        <input
+        <div><input
           type="text"
           inputmode="numeric"
           id="sign-on-bonus"
           name="sign-on-bonus" 
-          class="{{with .Form.Errors.Get "sign-on-bonus"}} is-invalid
-        {{ end }}" value="{{$comp.SignOnBonus}}"/>
+          class="{{with .Form.Errors.Get "sign-on-bonus"}} is-invalid {{ end }}" 
+          value="$ {{.Form.Get "sign-on-bonus"}}"
+          oninput="formatMoneyNumbers(this)"/></div>
       </div>
       <div id="production" style="display: none" class="form-group">
         <label for="production">Production: {{with .Form.Errors.Get "production"}}
           <label class="text-danger">{{.}}</label>
           {{ end }}</label>
+          <div>
         <input
           type="text"
           inputmode="numeric"
           id="production"
-          name="production" value="{{$comp.Production}}"/>
+          name="production" value="$ {{.Form.Get "production"}}"
+          oninput="formatMoneyNumbers(this)"/>
+        </div>
       </div>
     </fieldset>
     <fieldset class="verification-info">
@@ -183,7 +192,7 @@
 <script>
   function toggleSpecializationInput() {
     const typeOfPracticeSelect = document.getElementById("type-of-practice");
-    const specializationInput = document.getElementById("specialization_input");
+    const specializationInput = document.getElementById("specialization-input");
     if (typeOfPracticeSelect.value === "specialization") {
       specializationInput.style.display = "block";
     } else {
@@ -197,6 +206,13 @@
     } else {
       elementToToggle.style.display = "none";
     }
+  }
+  function formatMoneyNumbers(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value !== "") {
+        value = new Intl.NumberFormat().format(value);
+    }
+    input.value = '$' + value;
   }
 </script>
 {{ end }}

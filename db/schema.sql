@@ -10,8 +10,8 @@ CREATE TABLE compensations (
     years_of_experience NUMERIC,
     base_salary NUMERIC,
     sign_on_bonus NUMERIC,
-    production_salary NUMERIC,
-    total_salary NUMERIC,
+    production NUMERIC,
+    total_comp NUMERIC,
     verification_document BYTEA,
     verified BOOLEAN,
     date_created TIMESTAMP DEFAULT now() NOT NULL

@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
 	"github.com/ryannicoletti/veterinarycomp/internal/driver"
 	"github.com/ryannicoletti/veterinarycomp/internal/handlers"
+	"github.com/ryannicoletti/veterinarycomp/internal/helpers"
 	"github.com/ryannicoletti/veterinarycomp/internal/models"
 	"github.com/ryannicoletti/veterinarycomp/internal/render"
 )
@@ -19,9 +21,18 @@ const portNumber string = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 func main() {
 	gob.Register(models.Compensation{})
+
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	db, err := start()
 	if err != nil {
 		log.Fatal(err)
@@ -70,6 +81,7 @@ func start() (*driver.DB, error) {
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewRenderer(&app)
+	helpers.NewHelpers(&app)
 
 	return db, nil
 }
