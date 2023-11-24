@@ -2,12 +2,30 @@ package dbrepo
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
+	"github.com/ryannicoletti/veterinarycomp/internal/config"
 	"github.com/ryannicoletti/veterinarycomp/internal/models"
+	"github.com/ryannicoletti/veterinarycomp/internal/repository"
 )
 
-func (dbRepo *postgresDBRepo) GetAllCompensation() ([]models.Compensation, error) {
+type pgCompensationRepo struct {
+	App *config.AppConfig
+	DB  *sql.DB
+}
+
+// returns a pointer to an instance of postgresDBRepo
+// this works because postgresDBRepo implements DatabaseRepo, which
+// is the declared return type of the function
+func NewPostgresCompensationRepo(conn *sql.DB, a *config.AppConfig) repository.CompensationDatabaseRepo {
+	return &pgCompensationRepo{
+		App: a,
+		DB:  conn,
+	}
+}
+
+func (dbRepo *pgCompensationRepo) GetAllCompensation() ([]models.Compensation, error) {
 	// if we cant insert within 3 seconds, cancel the transaction
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -42,7 +60,7 @@ func (dbRepo *postgresDBRepo) GetAllCompensation() ([]models.Compensation, error
 	return compensations, nil
 }
 
-func (dbRepo *postgresDBRepo) InsertCompensation(comp models.Compensation) error {
+func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	query := `insert into compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, date_created)

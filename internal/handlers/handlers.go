@@ -17,14 +17,14 @@ import (
 var Repo *Repository
 
 type Repository struct {
-	App *config.AppConfig
-	DB  repository.DatabaseRepo
+	App                *config.AppConfig
+	CompensationDBRepo repository.CompensationDatabaseRepo
 }
 
 func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
-		App: a,
-		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
+		App:                a,
+		CompensationDBRepo: dbrepo.NewPostgresCompensationRepo(db.SQL, a),
 	}
 }
 
@@ -36,7 +36,7 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIp := r.RemoteAddr
 	repo.App.Session.Put(r.Context(), "remote_ip", remoteIp)
 	compData := make(map[string]interface{})
-	c, err := repo.DB.GetAllCompensation()
+	c, err := Repo.CompensationDBRepo.GetAllCompensation()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -109,7 +109,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 		render.Template(w, r, "add-comp.page.tmpl", &models.TemplateData{Form: form, Data: data})
 		return
 	}
-	err = repo.DB.InsertCompensation(compensation)
+	err = Repo.CompensationDBRepo.InsertCompensation(compensation)
 	if err != nil {
 		helpers.ServerError(w, err)
 		// return here? needs testing

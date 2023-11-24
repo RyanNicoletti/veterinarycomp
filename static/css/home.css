@@ -28,4 +28,35 @@ tr:nth-child(odd) td {
 .table-actions {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+button {
+  appearance: none;
+  background-color: #2ea44f;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+}
+button:active {
+  background-color: #298e46;
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
+button a {
+  color: #fff;
+  text-decoration: none;
+}
+
+input[type="search"] {
+  padding: 6px 16px;
+  border-radius: 6px;
+  width: 250px;
 }

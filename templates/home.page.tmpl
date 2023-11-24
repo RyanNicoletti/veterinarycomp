@@ -7,8 +7,7 @@
       <input
         type="search"
         id="comp-search"
-        placeholder="Search by location, hospital, etc..."
-      />
+        placeholder="Search by location, hospital, etc..." />
       <button>Search</button>
     </div>
     <div>
@@ -17,23 +16,65 @@
   </div>
   <table class="comp-table">
     <tr>
-      <th>Company/Hospital</th>
+      <th>
+        Company/Hospital
+        <div>(location)</div>
+      </th>
       <th>
         Job Title
         <div>(type of practice)</div>
       </th>
       <th>Years of Experience</th>
-      <th>Total Compensation (USD)</th>
+      <th>Compensation (USD)</th>
     </tr>
-
+    {{
+      range.Data.compensations
+    }}
     <tr>
-      <td></td>
       <td>
-        <div></div>
+        {{ .CompanyName }}<br />
+        <div>({{ .Location }})</div>
       </td>
-      <td></td>
-      <td></td>
+      <td>
+        {{ .JobTitle }}
+        <div>({{ .PracticeType }})</div>
+      </td>
+      <td>{{ .YearsExperience }}</td>
+      <td>
+        Total Compensation:
+        <span id="formattedNumber">{{.TotalCompensation}}</span>
+        <div>
+          Base salary:
+          <span id="formattedNumber">{{.BaseSalary}}</span>
+        </div>
+        <div>
+          Sign on bonus:
+          <span id="formattedNumber">{{.SignOnBonus}}</span>
+        </div>
+        <div>
+          Production:
+          <span id="formattedNumber">{{.Production}}</span>
+        </div>
+      </td>
     </tr>
+    {{
+      end
+    }}
   </table>
 </div>
+{{ end }}
+{{define "js"}}
+<script>
+  const formatWithCommas = (value) => {
+    return new Intl.NumberFormat("en-US").format(value);
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const elements = document.querySelectorAll("#formattedNumber");
+    elements.forEach((element) => {
+      const value = parseFloat(element.textContent);
+      element.textContent = formatWithCommas(value);
+    });
+  });
+</script>
 {{ end }}
