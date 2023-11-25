@@ -16,3 +16,16 @@ CREATE TABLE compensations (
     verified BOOLEAN,
     date_created TIMESTAMP DEFAULT now() NOT NULL
 );
+
+INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, date_created)
+VALUES
+('Vet Clinic A', 'Veterinarian', 'Small Animal Medicine and Surgery (GP)', 'Board Certified', 'City A', 8, 90000, 6000, 3000, 99000, NULL, true, '2023-11-24 12:00:00'),
+('Animal Hospital B', 'Veterinary Technician', 'Small Animal Medicine (GP)', '', 'City B', 5, 60000, 3500, 1500, 65000, NULL, false, '2023-11-23 14:30:00'),
+('Pet Care Center C', 'Veterinary Receptionist', 'General Practice', '', 'City C', 3, 40000, 2000, 800, 42800, NULL, true, '2023-11-22 16:45:00'),
+('Veterinary Services D', 'Veterinarian', 'Equine Ambulatory', 'Board Certified', 'City D', 10, 110000, 8000, 4000, 122000, NULL, false, '2023-11-21 10:15:00'),
+('Companion Animals E', 'Veterinary Technician', 'Exotics', '', 'City E', 6, 70000, 4500, 1800, 76300, NULL, true, '2023-11-20 08:00:00'),
+('Urban Vets F', 'Veterinarian', 'Small Animal Medicine (GP)', '', 'City F', 7, 85000, 5500, 2500, 93000, NULL, false, '2023-11-19 11:20:00'),
+('Community Pets G', 'Veterinary Technician', 'Shelter Medicine', '', 'City G', 4, 50000, 3000, 1200, 54200, NULL, true, '2023-11-18 13:40:00'),
+('Pet Wellness H', 'Veterinary Receptionist', 'General Practice', '', 'City H', 9, 75000, 4000, 1600, 80600, NULL, false, '2023-11-17 15:50:00'),
+('Happy Paws I', 'Veterinarian', 'Mixed Animal Practice', 'Board Certified', 'City I', 2, 60000, 2500, 1200, 63700, NULL, true, '2023-11-16 09:30:00'),
+('City Pets J', 'Veterinary Technician', 'Exotics', '', 'City J', 5, 65000, 4000, 1600, 70600, NULL, false, '2023-11-15 07:00:00');
