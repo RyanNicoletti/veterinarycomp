@@ -1,6 +1,6 @@
 .container {
   max-width: 70vw;
-  margin: 0 auto;
+  margin: 150px auto;
 }
 
 table {
@@ -55,8 +55,16 @@ button a {
   text-decoration: none;
 }
 
-input[type="search"] {
+input {
   padding: 6px 16px;
   border-radius: 6px;
   width: 250px;
+}
+
+#clear-search > a {
+  text-decoration: none;
+  color: blue;
+}
+#clear-search > a:active {
+  color: purple;
 }

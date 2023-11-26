@@ -14,12 +14,14 @@
         <a href="/about">About</a>
       </nav>
     </header>
-    <main>
+    <main class="page-wrap">
       {{block "content" .}}
 
       {{ end }}
     </main>
-    <footer><p>&copy; 2023 vetcomp. All rights reserved.</p></footer>
+    <footer class="site-footer">
+      <p>&copy; 2023 vetcomp. All rights reserved.</p>
+    </footer>
     {{block "js" .}}
     {{ end }}
   </body>

@@ -3,13 +3,20 @@
 <link rel="stylesheet" type="text/css" href="/static/css/home.css" />
 <div class="container">
   <div class="table-actions">
-    <div>
+    <form action="/search-comp" method="post">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
       <input
-        type="search"
+        type="text"
         id="comp-search"
-        placeholder="Search by location, hospital, etc..." />
-      <button>Search</button>
-    </div>
+        name="location-hospital"
+        placeholder="Search by location or hospital" />
+      <button type="submit">Search</button>
+      {{if .IsSearchPerformed}}
+      <span id="clear-search" style="display: inline"
+        ><a href="/">clear search</a></span
+      >
+      {{ end }}
+    </form>
     <div>
       <button><a href="/add-comp">Add Compensation</a></button>
     </div>
@@ -68,7 +75,6 @@
   const formatWithCommas = (value) => {
     return new Intl.NumberFormat("en-US").format(value);
   };
-
   document.addEventListener("DOMContentLoaded", function () {
     const elements = document.querySelectorAll("#formattedNumber");
     elements.forEach((element) => {

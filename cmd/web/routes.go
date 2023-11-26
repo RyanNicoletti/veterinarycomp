@@ -17,6 +17,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(SessionLoad)
 
 	mux.Get("/", handlers.Repo.Home)
+	mux.Post("/search-comp", handlers.Repo.SearchComp)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/add-comp", handlers.Repo.CompForm)
 	mux.Post("/add-comp", handlers.Repo.PostCompForm)

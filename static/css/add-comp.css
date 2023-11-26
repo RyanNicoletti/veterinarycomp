@@ -1,12 +1,7 @@
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
 .form-container {
   display: flex;
   justify-content: center;
+  margin: 150px auto;
 }
 fieldset {
   border: none;
@@ -18,8 +13,6 @@ fieldset {
   margin: 15px 0 10px 0;
 }
 form {
-  padding: 20px 20px 0 20px;
-  margin-top: 50px;
   width: 40vw;
 }
 form > div {

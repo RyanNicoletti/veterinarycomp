@@ -11,7 +11,7 @@ import (
 	"github.com/ryannicoletti/veterinarycomp/internal/models"
 	"github.com/ryannicoletti/veterinarycomp/internal/render"
 	"github.com/ryannicoletti/veterinarycomp/internal/repository"
-	"github.com/ryannicoletti/veterinarycomp/internal/repository/dbrepo"
+	dbrepo "github.com/ryannicoletti/veterinarycomp/internal/repository/repositoryimpl"
 )
 
 var Repo *Repository
@@ -43,6 +43,18 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	}
 	compData["compensations"] = c
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: compData})
+}
+
+func (repo *Repository) SearchComp(w http.ResponseWriter, r *http.Request) {
+	locationOrHospital := r.Form.Get("location-hospital")
+	compData := make(map[string]interface{})
+	c, err := Repo.CompensationDBRepo.SearchCompensation(locationOrHospital)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	compData["compensations"] = c
+	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: compData, IsSearchPerformed: true})
 }
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {

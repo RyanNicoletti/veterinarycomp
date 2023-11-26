@@ -1,4 +1,4 @@
-package dbrepo
+package repositoryimpl
 
 import (
 	"context"
@@ -71,4 +71,39 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 	}
 
 	return nil
+}
+
+func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string) ([]models.Compensation, error) {
+	var compensations = []models.Compensation{}
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := `SELECT * FROM compensations
+	WHERE location ILIKE '%' || $1 || '%' OR company_name ILIKE '%' || $1 || '%'`
+	rows, err := dbRepo.DB.QueryContext(ctx, query, locationOrHospital)
+	if err != nil {
+		return compensations, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var compensation = models.Compensation{}
+		err := rows.Scan(&compensation.ID,
+			&compensation.CompanyName,
+			&compensation.JobTitle,
+			&compensation.PracticeType,
+			&compensation.BoardCertification,
+			&compensation.Location,
+			&compensation.YearsExperience,
+			&compensation.BaseSalary,
+			&compensation.SignOnBonus,
+			&compensation.Production,
+			&compensation.TotalCompensation,
+			&compensation.VerificationDocument,
+			&compensation.Verified,
+			&compensation.CreatedAt)
+		if err != nil {
+			return compensations, err
+		}
+		compensations = append(compensations, compensation)
+	}
+	return compensations, nil
 }
