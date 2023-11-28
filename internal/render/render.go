@@ -39,7 +39,7 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 	buf := new(bytes.Buffer)
 
 	td = AddDefaultData(td, r)
-
+	// TODO: combine by just saying t.Execute(w, td) ???
 	err := t.Execute(buf, td)
 	if err != nil {
 		log.Println(err)

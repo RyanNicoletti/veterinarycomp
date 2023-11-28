@@ -68,3 +68,17 @@ input {
 #clear-search > a:active {
   color: purple;
 }
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  margin-right: 40px;
+}
+.pagination-list {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+.pagination-list > li {
+  margin-right: 10px;
+}

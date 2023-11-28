@@ -15,8 +15,11 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
-
-	mux.Get("/", handlers.Repo.Home)
+	mux.Use(Paginate)
+	mux.Route("/", func(mux chi.Router) {
+		mux.With(Paginate).Get("/", handlers.Repo.Home)
+		mux.With(Paginate).Get("/{page}", handlers.Repo.Home)
+	})
 	mux.Post("/search-comp", handlers.Repo.SearchComp)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/add-comp", handlers.Repo.CompForm)

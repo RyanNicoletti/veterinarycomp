@@ -25,12 +25,12 @@ func NewPostgresCompensationRepo(conn *sql.DB, a *config.AppConfig) repository.C
 	}
 }
 
-func (dbRepo *pgCompensationRepo) GetAllCompensation() ([]models.Compensation, error) {
+func (dbRepo *pgCompensationRepo) GetAllCompensation(limit, offset int) ([]models.Compensation, error) {
 	// if we cant insert within 3 seconds, cancel the transaction
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	query := `select * from compensations`
-	rows, err := dbRepo.DB.QueryContext(ctx, query)
+	query := `select * from compensations order by id limit $1 offset $2`
+	rows, err := dbRepo.DB.QueryContext(ctx, query, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -106,4 +106,16 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string) 
 		compensations = append(compensations, compensation)
 	}
 	return compensations, nil
+}
+
+func (dbRepo *pgCompensationRepo) GetTotalCompensationsCount() (int, error) {
+	var total int
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := `SELECT COUNT(id) FROM compensations`
+	err := dbRepo.DB.QueryRowContext(ctx, query).Scan(&total)
+	if err != nil {
+		return 0, err
+	}
+	return total, nil
 }

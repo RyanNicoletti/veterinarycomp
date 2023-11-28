@@ -68,9 +68,34 @@
       end
     }}
   </table>
+  <div class="pagination">
+    <ul class="pagination-list">
+      {{if (gt .Data.page.CurrentPage 1)}}
+      <li>
+        <a href="/{{.Data.page.Previous}}">{{.Data.page.Previous}}</a>
+      </li>
+      {{
+        end
+      }}
+      <li>{{.Data.page.CurrentPage}}</li>
+      {{if (lt .Data.page.CurrentPage .Data.page.TotalPage)}}
+      <li>
+        <a href="/{{.Data.page.Next}}">{{.Data.page.Next}}</a>
+      </li>
+      {{
+        end
+      }}
+      {{if and (eq .Data.page.CurrentPage 1) (gt .Data.page.TotalPage 2)}}
+      <li><a href="/3">3</a></li>
+      {{
+        end
+      }}
+    </ul>
+  </div>
 </div>
+
 {{ end }}
-{{define "js"}}
+{{ define "js" }}
 <script>
   const formatWithCommas = (value) => {
     return new Intl.NumberFormat("en-US").format(value);

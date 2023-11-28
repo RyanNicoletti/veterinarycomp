@@ -35,26 +35,57 @@ func NewHandlers(r *Repository) {
 func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIp := r.RemoteAddr
 	repo.App.Session.Put(r.Context(), "remote_ip", remoteIp)
-	compData := make(map[string]interface{})
-	c, err := Repo.CompensationDBRepo.GetAllCompensation()
+	data := make(map[string]interface{})
+	page, ok := r.Context().Value("page").(int)
+	if !ok {
+		page = 1
+	}
+	rowPerPage := 10
+	offset := rowPerPage * (page - 1)
+
+	c, err := Repo.CompensationDBRepo.GetAllCompensation(rowPerPage, offset)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	compData["compensations"] = c
-	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: compData})
+	data["compensations"] = c
+
+	total, err := Repo.CompensationDBRepo.GetTotalCompensationsCount()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	t := total / rowPerPage
+	remainder := total % rowPerPage
+	var totalPages int
+	if remainder == 0 {
+		totalPages = t
+	} else {
+		totalPages = t + 1
+	}
+
+	paginationData := models.Pagination{
+		Next:          page + 1,
+		Previous:      page - 1,
+		RecordPerPage: rowPerPage,
+		CurrentPage:   page,
+		TotalPage:     totalPages,
+	}
+
+	data["page"] = paginationData
+	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: data})
 }
 
 func (repo *Repository) SearchComp(w http.ResponseWriter, r *http.Request) {
 	locationOrHospital := r.Form.Get("location-hospital")
-	compData := make(map[string]interface{})
+	data := make(map[string]interface{})
 	c, err := Repo.CompensationDBRepo.SearchCompensation(locationOrHospital)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	compData["compensations"] = c
-	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: compData, IsSearchPerformed: true})
+	data["compensations"] = c
+	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: data, IsSearchPerformed: true})
 }
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
