@@ -31,34 +31,34 @@
         Job Title
         <div>(type of practice)</div>
       </th>
-      <th>Years of Experience</th>
+      <th class="experience-header">Years of Experience</th>
       <th>Compensation (USD)</th>
     </tr>
     {{
       range.Data.compensations
     }}
     <tr>
-      <td>
+      <td class="company-name">
         {{ .CompanyName }}<br />
-        <div>({{ .Location }})</div>
+        <div class="location">({{ .Location }})</div>
       </td>
-      <td>
+      <td class="job-title">
         {{ .JobTitle }}
-        <div>({{ .PracticeType }})</div>
+        <div class="practice-type">({{ .PracticeType }})</div>
       </td>
-      <td>{{ .YearsExperience }}</td>
-      <td>
+      <td class="experience">{{ .YearsExperience }}</td>
+      <td class="total-comp">
         Total Compensation:
         <span id="formattedNumber">{{.TotalCompensation}}</span>
-        <div>
+        <div class="base-salary">
           Base salary:
           <span id="formattedNumber">{{.BaseSalary}}</span>
         </div>
-        <div>
+        <div class="sign-on">
           Sign on bonus:
           <span id="formattedNumber">{{.SignOnBonus}}</span>
         </div>
-        <div>
+        <div class="production">
           Production:
           <span id="formattedNumber">{{.Production}}</span>
         </div>

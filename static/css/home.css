@@ -10,11 +10,14 @@ table {
   font-size: 0.8rem;
   width: 70vw;
 }
+th {
+  font-size: 1.1rem;
+}
 
 td,
 th {
   border: 1px solid rgb(190, 190, 190);
-  padding: 10px 20px;
+  padding: 5px 5px;
 }
 
 tr:nth-child(even) td {
@@ -81,4 +84,28 @@ input {
 }
 .pagination-list > li {
   margin-right: 10px;
+}
+.company-name {
+  color: darkblue;
+}
+.location {
+  color: black;
+}
+.company-name,
+.job-title,
+.total-comp,
+.experience {
+  font-size: 1.1rem;
+}
+.practice-type,
+.location {
+  font-size: 0.8em;
+}
+.base-salary,
+.sign-on,
+.production {
+  font-size: 0.7em;
+}
+.experience-header {
+  width: 10%;
 }
