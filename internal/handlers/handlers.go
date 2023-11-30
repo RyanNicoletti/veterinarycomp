@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
@@ -77,14 +78,44 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (repo *Repository) SearchComp(w http.ResponseWriter, r *http.Request) {
-	locationOrHospital := r.Form.Get("location-hospital")
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+	rowPerPage := 10
+	offset := rowPerPage * (page - 1)
+	locationOrHospital := r.URL.Query().Get("location-hospital")
 	data := make(map[string]interface{})
-	c, err := Repo.CompensationDBRepo.SearchCompensation(locationOrHospital)
+	c, err := Repo.CompensationDBRepo.SearchCompensation(locationOrHospital, rowPerPage, offset)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 	data["compensations"] = c
+	total, err := Repo.CompensationDBRepo.GetTotalSearchCompensationsCount(locationOrHospital)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	t := total / rowPerPage
+	remainder := total % rowPerPage
+	var totalPages int
+	if remainder == 0 {
+		totalPages = t
+	} else {
+		totalPages = t + 1
+	}
+
+	paginationData := models.Pagination{
+		Next:          page + 1,
+		Previous:      page - 1,
+		RecordPerPage: rowPerPage,
+		CurrentPage:   page,
+		TotalPage:     totalPages,
+	}
+
+	data["page"] = paginationData
+	data["locationOrHospital"] = locationOrHospital
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: data, IsSearchPerformed: true})
 }
 

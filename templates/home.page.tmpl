@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="/static/css/home.css" />
 <div class="container">
   <div class="table-actions">
-    <form action="/search-comp" method="post">
+    <form action="/search-comp" method="get">
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
       <input
         type="text"
@@ -69,6 +69,44 @@
     }}
   </table>
   <div class="pagination">
+    {{if .IsSearchPerformed}}
+    <div>test</div>
+    <div>{{.Data.page}}</div>
+    <div>test</div>
+    <ul class="pagination-list">
+      {{if (gt .Data.page.CurrentPage 1)}}
+      <li>
+        <a
+          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Previous }}"
+          >{{.Data.page.Previous}}</a
+        >
+      </li>
+      {{
+        end
+      }}
+      <li>{{.Data.page.CurrentPage}}</li>
+      {{if (lt .Data.page.CurrentPage .Data.page.TotalPage)}}
+      <li>
+        <a
+          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Next }}"
+          >{{.Data.page.Next}}</a
+        >
+      </li>
+      {{
+        end
+      }}
+      {{if and (eq .Data.page.CurrentPage 1) (gt .Data.page.TotalPage 2)}}
+      <li>
+        <a
+          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page=3"
+          >3</a
+        >
+      </li>
+      {{
+        end
+      }}
+    </ul>
+    {{else}}
     <ul class="pagination-list">
       {{if (gt .Data.page.CurrentPage 1)}}
       <li>
@@ -91,6 +129,7 @@
         end
       }}
     </ul>
+    {{ end }}
   </div>
 </div>
 

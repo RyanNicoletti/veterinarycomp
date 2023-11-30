@@ -73,13 +73,14 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 	return nil
 }
 
-func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string) ([]models.Compensation, error) {
+func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, rowPerPage, offset int) ([]models.Compensation, error) {
 	var compensations = []models.Compensation{}
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	query := `SELECT * FROM compensations
-	WHERE location ILIKE '%' || $1 || '%' OR company_name ILIKE '%' || $1 || '%'`
-	rows, err := dbRepo.DB.QueryContext(ctx, query, locationOrHospital)
+    WHERE location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M'
+	order by id limit $1 offset $2`
+	rows, err := dbRepo.DB.QueryContext(ctx, query, rowPerPage, offset)
 	if err != nil {
 		return compensations, err
 	}
@@ -106,6 +107,15 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string) 
 		compensations = append(compensations, compensation)
 	}
 	return compensations, nil
+}
+
+func (dbRepo *pgCompensationRepo) GetTotalSearchCompensationsCount(locationOrHospital string) (int, error) {
+	query := `SELECT COUNT(*) FROM compensations WHERE location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M'`
+	var count int
+	if err := dbRepo.DB.QueryRow(query).Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 func (dbRepo *pgCompensationRepo) GetTotalCompensationsCount() (int, error) {
