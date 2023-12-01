@@ -20,14 +20,11 @@ func routes(app *config.AppConfig) http.Handler {
 		mux.With(Paginate).Get("/", handlers.Repo.Home)
 		mux.With(Paginate).Get("/{page}", handlers.Repo.Home)
 	})
-	mux.Route("/search-comp", func(mux chi.Router) {
-		mux.With(Paginate).Get("/", handlers.Repo.SearchComp)
-		mux.With(Paginate).Get("/{page}", handlers.Repo.SearchComp)
-	})
-	//mux.Post("/search-comp", handlers.Repo.SearchComp)
+	mux.Get("/search-comp", handlers.Repo.SearchComp)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/add-comp", handlers.Repo.CompForm)
 	mux.Post("/add-comp", handlers.Repo.PostCompForm)
+	mux.Get("/login", handlers.Repo.Login)
 	staticFileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", staticFileServer))
 	return mux

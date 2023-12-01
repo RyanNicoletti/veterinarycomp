@@ -25,3 +25,18 @@ type Document struct {
 	ContentType string
 	CreatedAt   time.Time
 }
+
+type Pagination struct {
+	Next          int
+	Previous      int
+	RecordPerPage int
+	CurrentPage   int
+	TotalPage     int
+}
+
+type User struct {
+	Id        int
+	Email     string
+	Password  string
+	CreatedAt time.Time
+}

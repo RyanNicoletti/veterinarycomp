@@ -18,7 +18,7 @@ type pgCompensationRepo struct {
 // returns a pointer to an instance of postgresDBRepo
 // this works because postgresDBRepo implements DatabaseRepo, which
 // is the declared return type of the function
-func NewPostgresCompensationRepo(conn *sql.DB, a *config.AppConfig) repository.CompensationDatabaseRepo {
+func NewPostgresCompensationRepo(conn *sql.DB, a *config.AppConfig) repository.CompensationRepo {
 	return &pgCompensationRepo{
 		App: a,
 		DB:  conn,

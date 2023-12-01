@@ -1,6 +1,34 @@
 {{template "base" .}}
 {{define "content"}}
-<div>about</div>
-
+<link rel="stylesheet" type="text/css" href="/static/css/about.css" />
+<div class="about">
+  <section class="summary">
+    <h3>About Veterinarycomp.com</h3>
+    <p>
+      Veterinarycomp.com is a platform designed to empower veterinarians by
+      providing insights into the financial aspects of their professional
+      environment. Our goal is to enhance your understanding of the financial
+      landscape, providing the confidence needed for effective negotiation when
+      exploring new job opportunities.
+    </p>
+  </section>
+  <section class="faq">
+    <h3>FAQ</h3>
+    <p class="question">Is compensation data submitted anonymously?</p>
+    <p class="answer">
+      Yes. All data entered into the database can be done so completely
+      anonymously. If you wish to have your salary information verified, an
+      offer letter can be uploaded. Along with your information.
+    </p>
+    <p class="question">How does verification work?</p>
+    <p class="answer">
+      A site administrator will review the uploaded document and compare it to
+      the entered values. As long as they match, verification will be added to
+      your post and the document will then be deleted. Uploaded documents are
+      never kept by veterinarycomp.com and are deleted immediately after the
+      verification process.
+    </p>
+  </section>
+</div>
 
 {{ end }}

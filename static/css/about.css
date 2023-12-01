@@ -1,0 +1,33 @@
+.about {
+  max-width: 70vw;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.summary {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.faq {
+  border-top: 2px solid #ccc;
+  padding-top: 20px;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+.question {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.answer {
+  margin-bottom: 15px;
+}
+p {
+  font-size: 1.2em;
+}

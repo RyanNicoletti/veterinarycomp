@@ -19,7 +19,7 @@ var Repo *Repository
 
 type Repository struct {
 	App                *config.AppConfig
-	CompensationDBRepo repository.CompensationDatabaseRepo
+	CompensationDBRepo repository.CompensationRepo
 }
 
 func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
@@ -38,7 +38,7 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	repo.App.Session.Put(r.Context(), "remote_ip", remoteIp)
 	data := make(map[string]interface{})
 	page, ok := r.Context().Value("page").(int)
-	if !ok {
+	if !ok || page == 0 {
 		page = 1
 	}
 	rowPerPage := 10
@@ -121,6 +121,10 @@ func (repo *Repository) SearchComp(w http.ResponseWriter, r *http.Request) {
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "about.page.tmpl", &models.TemplateData{})
+}
+
+func (repo *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "login.page.tmpl", &models.TemplateData{Form: forms.NewForm(nil)})
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {
