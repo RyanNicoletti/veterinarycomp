@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -12,7 +13,7 @@ import (
 	"github.com/ryannicoletti/veterinarycomp/internal/models"
 	"github.com/ryannicoletti/veterinarycomp/internal/render"
 	"github.com/ryannicoletti/veterinarycomp/internal/repository"
-	dbrepo "github.com/ryannicoletti/veterinarycomp/internal/repository/repositoryimpl"
+	"github.com/ryannicoletti/veterinarycomp/internal/repository/repositoryimpl"
 )
 
 var Repo *Repository
@@ -20,12 +21,14 @@ var Repo *Repository
 type Repository struct {
 	App                *config.AppConfig
 	CompensationDBRepo repository.CompensationRepo
+	UserDBRepo         repository.UserRepo
 }
 
 func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App:                a,
-		CompensationDBRepo: dbrepo.NewPostgresCompensationRepo(db.SQL, a),
+		CompensationDBRepo: repositoryimpl.NewPostgresCompensationRepo(db.SQL, a),
+		UserDBRepo:         repositoryimpl.NewPostgresUserRepo(db.SQL, a),
 	}
 }
 
@@ -125,6 +128,47 @@ func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 func (repo *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.tmpl", &models.TemplateData{Form: forms.NewForm(nil)})
+}
+
+func (repo *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
+	_ = repo.App.Session.RenewToken(r.Context())
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+	}
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+	form := forms.NewForm(r.PostForm)
+	form.Required("email", "password")
+	form.IsEmail(email)
+	if !form.Valid() {
+		render.Template(w, r, "login.page.tmpl", &models.TemplateData{Form: form})
+		return
+	}
+	id, _, err := repo.UserDBRepo.Authenticate(email, password)
+	if err != nil {
+		repo.App.Session.Put(r.Context(), "error", "Invalid login credentials")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	repo.App.Session.Put(r.Context(), "user_id", id)
+
+	isAdmin, _ := repo.UserDBRepo.IsAdmin(id)
+	if isAdmin {
+		repo.App.Session.Put(r.Context(), "is_admin", isAdmin)
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (repo *Repository) Logout(w http.ResponseWriter, r *http.Request) {
+	_ = repo.App.Session.Destroy(r.Context())
+	_ = repo.App.Session.RenewToken(r.Context())
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
+
+func (repo *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{})
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {

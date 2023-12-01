@@ -20,6 +20,11 @@ func NewRenderer(a *config.AppConfig) {
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
 	td.CSRFToken = nosurf.Token(r)
+	if app.Session.Exists(r.Context(), "user_id") {
+		td.IsAuthenticated = true
+	} else {
+		td.IsAuthenticated = false
+	}
 	return td
 }
 

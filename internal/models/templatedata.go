@@ -11,4 +11,5 @@ type TemplateData struct {
 	Error             string
 	CSRFToken         string
 	Form              *forms.Form
+	IsAuthenticated   bool
 }

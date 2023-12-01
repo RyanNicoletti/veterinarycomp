@@ -13,4 +13,5 @@ type CompensationRepo interface {
 type UserRepo interface {
 	GetUserById(id int) (models.User, error)
 	Authenticate(email, password string) (int, string, error)
+	IsAdmin(id int) (bool, error)
 }

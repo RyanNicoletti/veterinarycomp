@@ -1,0 +1,78 @@
+{{template "base" .}}
+{{define "content"}}
+<table class="comp-table">
+  <tr>
+    <th>
+      Company/Hospital
+      <div>(location)</div>
+    </th>
+    <th>
+      Job Title
+      <div>(type of practice)</div>
+    </th>
+    <th class="experience-header">Years of Experience</th>
+    <th>Compensation (USD)</th>
+  </tr>
+  {{
+    range.Data.compensations
+  }}
+  <tr>
+    <td class="company-name">
+      {{ .CompanyName }}<br />
+      <div class="location">({{ .Location }})</div>
+    </td>
+    <td class="job-title">
+      {{ .JobTitle }}
+      <div class="practice-type">({{ .PracticeType }})</div>
+    </td>
+    <td class="experience">{{ .YearsExperience }}</td>
+    <td class="total-comp">
+      Total Compensation:
+      <span id="formattedNumber">{{.TotalCompensation}}</span>
+      <div class="base-salary">
+        Base salary:
+        <span id="formattedNumber">{{.BaseSalary}}</span>
+      </div>
+      <div class="sign-on">
+        Sign on bonus:
+        <span id="formattedNumber">{{.SignOnBonus}}</span>
+      </div>
+      <div class="production">
+        Production:
+        <span id="formattedNumber">{{.Production}}</span>
+      </div>
+    </td>
+    <td class="verify-comp">
+      <button>Verify Comp</button>
+      <button>Reject Comp</button>
+    </td>
+  </tr>
+  {{
+    end
+  }}
+</table>
+<div class="pagination">
+  <ul class="pagination-list">
+    {{if (gt .Data.page.CurrentPage 1)}}
+    <li>
+      <a href="/{{.Data.page.Previous}}">{{.Data.page.Previous}}</a>
+    </li>
+    {{
+      end
+    }}
+    <li>{{.Data.page.CurrentPage}}</li>
+    {{if (lt .Data.page.CurrentPage .Data.page.TotalPage)}}
+    <li>
+      <a href="/{{.Data.page.Next}}">{{.Data.page.Next}}</a>
+    </li>
+    {{
+      end
+    }}
+    {{if and (eq .Data.page.CurrentPage 1) (gt .Data.page.TotalPage 2)}}
+    <li><a href="/3">3</a></li>
+    {{
+      end
+    }}
+  </ul>
+</div>
+{{ end }}

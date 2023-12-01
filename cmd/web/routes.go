@@ -15,7 +15,6 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
-	mux.Use(Paginate)
 	mux.Route("/", func(mux chi.Router) {
 		mux.With(Paginate).Get("/", handlers.Repo.Home)
 		mux.With(Paginate).Get("/{page}", handlers.Repo.Home)
@@ -25,6 +24,13 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/add-comp", handlers.Repo.CompForm)
 	mux.Post("/add-comp", handlers.Repo.PostCompForm)
 	mux.Get("/login", handlers.Repo.Login)
+	mux.Post("/login", handlers.Repo.PostLogin)
+	mux.Get("/logout", handlers.Repo.Logout)
+	mux.Route("/admin", func(mux chi.Router) {
+		mux.Use(Auth)
+		mux.Use(Admin)
+		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
+	})
 	staticFileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", staticFileServer))
 	return mux

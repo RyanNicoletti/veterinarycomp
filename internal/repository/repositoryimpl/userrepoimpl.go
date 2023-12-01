@@ -35,7 +35,7 @@ func (dbRepo *pgUserRepo) GetUserById(id int) (models.User, error) {
 
 	row := dbRepo.DB.QueryRowContext(ctx, query, id)
 	var u models.User
-	err := row.Scan(&u.Id, &u.Email, &u.Password, &u.CreatedAt)
+	err := row.Scan(&u.Id, &u.Email, &u.Password, &u.IsAdmin, &u.CreatedAt)
 
 	if err != nil {
 		return u, err
@@ -65,4 +65,18 @@ func (dbRepo *pgUserRepo) Authenticate(email, password string) (int, string, err
 	}
 
 	return id, hashedPassword, nil
+}
+
+func (dbRepo *pgUserRepo) IsAdmin(id int) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select is_admin from users where id = $1`
+	row := dbRepo.DB.QueryRowContext(ctx, query, id)
+	var isAdmin bool
+	err := row.Scan(&isAdmin)
+	if err != nil {
+		return false, err
+	}
+	return isAdmin, nil
 }

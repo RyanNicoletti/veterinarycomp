@@ -1,33 +1,26 @@
 {{template "base" .}}
 {{define "content"}}
+<link rel="stylesheet" type="text/css" href="/static/css/login.css" />
 <h2>Login</h2>
-<form>
+<form method="post" action="/login" novalidate>
+  <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
   <label for="email">
     Email: {{with .Form.Errors.Get "email"}}
     <label class="text-danger">{{.}}</label>
     {{ end }}
   </label>
 
-  <input
-    type="email"
-    name="email"
-    id="email"
-    autocomplete="off"
-    value=""
-    required />
+  <input type="email" name="email" id="email" autocomplete="off" value=""
+  class="{{with .Form.Errors.Get "email"}} is-invalid {{ end }}" required />
   <label for="password">
     Password: {{with .Form.Errors.Get "password"}}
     <label class="text-danger">{{.}}</label>
     {{ end }}
   </label>
 
-  <input
-    type="password"
-    name="password"
-    id="password"
-    autocomplete="off"
-    value=""
-    required />
+  <input type="password" name="password" id="password" autocomplete="off"
+  value="" class="{{with .Form.Errors.Get "password"}} is-invalid {{ end }}"
+  required />
   <input type="submit" value="Submit" />
 </form>
 {{ end }}
