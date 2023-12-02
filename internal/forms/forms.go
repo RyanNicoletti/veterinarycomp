@@ -44,9 +44,9 @@ func (f *Form) Required(fields ...string) {
 	}
 }
 
-func (f *Form) IsEmail(field string) {
-	if !govalidator.IsEmail(f.Get(field)) {
-		f.Errors.Add(field, "Invalid email address")
+func (f *Form) IsEmail(email string) {
+	if !govalidator.IsEmail(email) {
+		f.Errors.Add("email", "Invalid email address")
 	}
 }
 

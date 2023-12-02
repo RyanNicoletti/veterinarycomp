@@ -69,3 +69,5 @@ VALUES
 ('Paws and Claws LL', 'Veterinary Receptionist', 'Shelter Medicine', '', ' LL', 10, 115000, 8500, 4200, 128700, NULL, false, '2023-10-18 15:30:00'),
 ('Happy Tails MM', 'Veterinarian', 'Equine Ambulatory', 'Board Certified', ' MM', 2, 62000, 2700, 1300, 67000, NULL, true, '2023-10-17 09:15:00'),
 ('City Pets NN', 'Veterinary Technician', 'Small Animal Medicine (GP)', '', ' NN', 6, 68000, 4200, 1800, 74100, NULL, false, '2023-10-16 07:30:00');
+
+INSERT INTO users (email, password, is_admin, created_at) VALUES ('vetcomp@gmail.com', '$2a$12$g9oS9tWRmxz32Ws4mZqrl.b7dzcLAKiCauhgXSLhaj0DJSgjUo2/a', true, '2023-10-16 07:30:00');

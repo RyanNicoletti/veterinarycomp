@@ -50,7 +50,7 @@ func Auth(next http.Handler) http.Handler {
 
 func Admin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !app.Session.Exists(r.Context(), "admin") {
+		if !app.Session.Exists(r.Context(), "is_admin") {
 			session.Put(r.Context(), "error", "Must be an admin to view this page")
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return

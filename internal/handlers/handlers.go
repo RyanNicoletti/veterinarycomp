@@ -157,7 +157,6 @@ func (repo *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	if isAdmin {
 		repo.App.Session.Put(r.Context(), "is_admin", isAdmin)
 	}
-
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
@@ -168,7 +167,14 @@ func (repo *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (repo *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{})
+	c, err := Repo.CompensationDBRepo.GetAllCompensation(10, 0)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data := make(map[string]interface{})
+	data["compensations"] = c
+	render.Template(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{Data: data})
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {

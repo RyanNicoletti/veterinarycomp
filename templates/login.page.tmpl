@@ -10,8 +10,8 @@
     {{ end }}
   </label>
 
-  <input type="email" name="email" id="email" autocomplete="off" value=""
-  class="{{with .Form.Errors.Get "email"}} is-invalid {{ end }}" required />
+  <input type="email" name="email" id="email" autocomplete="off" value="{{.Form.Get "email"
+  }}" class="{{with .Form.Errors.Get "email"}} is-invalid {{ end }}" required />
   <label for="password">
     Password: {{with .Form.Errors.Get "password"}}
     <label class="text-danger">{{.}}</label>
@@ -19,8 +19,8 @@
   </label>
 
   <input type="password" name="password" id="password" autocomplete="off"
-  value="" class="{{with .Form.Errors.Get "password"}} is-invalid {{ end }}"
-  required />
+  value="{{.Form.Get "password"}}" class="{{with .Form.Errors.Get "password"}}
+  is-invalid {{ end }}" required />
   <input type="submit" value="Submit" />
 </form>
 {{ end }}
