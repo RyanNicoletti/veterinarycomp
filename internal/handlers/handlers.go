@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -167,14 +169,50 @@ func (repo *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (repo *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
-	c, err := Repo.CompensationDBRepo.GetAllCompensation(10, 0)
+	c, err := Repo.CompensationDBRepo.GetAllCompensation(100, 0)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 	data := make(map[string]interface{})
+	// sort comp data so rows with verification document appear at the top
+	sort.Slice(c, func(i, j int) bool {
+		if c[i].VerificationDocument != nil && c[j].VerificationDocument == nil {
+			return true
+		} else if c[i].VerificationDocument == nil && c[j].VerificationDocument != nil {
+			return false
+		}
+		return c[i].CreatedAt.After(c[j].CreatedAt)
+	})
 	data["compensations"] = c
 	render.Template(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{Data: data})
+}
+
+func (repo *Repository) DownloadVerification(w http.ResponseWriter, r *http.Request) {
+	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
+
+	document, err := Repo.CompensationDBRepo.GetVerificationDocument(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	contentType := document.ContentType
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Content-Disposition", "attachment; filename="+document.FileName)
+	w.Header().Set("Content-Length", strconv.Itoa(len(document.Data)))
+	_, err = w.Write(document.Data)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+}
+
+func (repo *Repository) VerifyComp(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {
@@ -210,6 +248,13 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 			ContentType: http.DetectContentType(verificationData),
 			CreatedAt:   time.Now(),
 		}
+		documentData, err := json.Marshal(document)
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
+
+		document.Data = documentData
 
 	} else {
 		document = nil

@@ -8,6 +8,7 @@ type CompensationRepo interface {
 	SearchCompensation(locationOrHospital string, rowPerPage, offset int) ([]models.Compensation, error)
 	GetTotalSearchCompensationsCount(locationOrHospital string) (int, error)
 	GetTotalCompensationsCount() (int, error)
+	GetVerificationDocument(ID int) (*models.Document, error)
 }
 
 type UserRepo interface {
