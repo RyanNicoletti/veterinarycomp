@@ -10,6 +10,7 @@ type CompensationRepo interface {
 	GetTotalCompensationsCount() (int, error)
 	GetVerificationDocument(ID int) (*models.Document, error)
 	GetDocumentMetaDataById(ID int) (models.Compensation, error)
+	VerifyComp(ID int) error
 }
 
 type UserRepo interface {

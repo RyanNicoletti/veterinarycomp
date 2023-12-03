@@ -213,7 +213,13 @@ func (repo *Repository) DownloadVerification(w http.ResponseWriter, r *http.Requ
 }
 
 func (repo *Repository) VerifyComp(w http.ResponseWriter, r *http.Request) {
-
+	ID, _ := strconv.Atoi(r.PostFormValue("id"))
+	err := Repo.CompensationDBRepo.VerifyComp(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {

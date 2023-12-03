@@ -178,7 +178,7 @@ func (dbRepo *pgCompensationRepo) GetDocumentMetaDataById(ID int) (models.Compen
 	defer cancel()
 	var c models.Compensation
 	var b []byte
-	query := `SELECT verification_document from  compensations WHERE id = $1`
+	query := `SELECT verification_document from compensations WHERE id = $1`
 	err := dbRepo.DB.QueryRowContext(ctx, query, ID).Scan(&b)
 	if err != nil {
 		return c, err
@@ -192,4 +192,15 @@ func (dbRepo *pgCompensationRepo) GetDocumentMetaDataById(ID int) (models.Compen
 		c.VerificationDocument = d
 	}
 	return c, nil
+}
+
+func (dbRepo *pgCompensationRepo) VerifyComp(ID int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := `UPDATE compensations SET verified = TRUE WHERE id = $1`
+	_, err := dbRepo.DB.ExecContext(ctx, query, ID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
