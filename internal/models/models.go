@@ -22,9 +22,10 @@ type Compensation struct {
 }
 
 type Document struct {
-	Data        []byte
+	ID          string
 	FileName    string
 	ContentType string
+	FilePath    string
 	CreatedAt   time.Time
 }
 

@@ -14,4 +14,5 @@ type AppConfig struct {
 	ErrorLog      *log.Logger
 	IsProduction  bool
 	Session       *scs.SessionManager
+	// UploadsDir    string
 }

@@ -1,13 +1,15 @@
 package handlers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
 	"github.com/ryannicoletti/veterinarycomp/internal/driver"
 	"github.com/ryannicoletti/veterinarycomp/internal/forms"
@@ -190,24 +192,23 @@ func (repo *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (repo *Repository) DownloadVerification(w http.ResponseWriter, r *http.Request) {
 	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
-
-	document, err := Repo.CompensationDBRepo.GetVerificationDocument(ID)
+	c, err := Repo.CompensationDBRepo.GetDocumentMetaDataById(ID)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-
-	contentType := document.ContentType
-	if contentType == "" {
-		contentType = "application/octet-stream"
-	}
-
-	w.Header().Set("Content-Type", contentType)
-	w.Header().Set("Content-Disposition", "attachment; filename="+document.FileName)
-	w.Header().Set("Content-Length", strconv.Itoa(len(document.Data)))
-	_, err = w.Write(document.Data)
+	fp := c.VerificationDocument.FilePath
+	w.Header().Set("Content-Type", c.VerificationDocument.ContentType)
+	w.Header().Set("Content-Disposition", "attachment; filename="+c.VerificationDocument.FileName)
+	f, err := os.ReadFile(fp)
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
+	}
+	_, err = w.Write(f)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
 	}
 }
 
@@ -241,21 +242,25 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 
 	if files, ok := r.MultipartForm.File["verification-document"]; ok && len(files) > 0 {
 		fileHeader := files[0]
-		verificationData, _ := form.ProcessFileUpload("verification-document", fileHeader)
-		document = &models.Document{
-			Data:        verificationData,
-			FileName:    "verification",
-			ContentType: http.DetectContentType(verificationData),
-			CreatedAt:   time.Now(),
-		}
-		documentData, err := json.Marshal(document)
+		fileData, err := form.ProcessFileUpload("verification-document", fileHeader)
 		if err != nil {
 			helpers.ServerError(w, err)
 			return
 		}
-
-		document.Data = documentData
-
+		fileName := uuid.NewString()
+		filePath := filepath.Join("uploads", fileName)
+		err = os.WriteFile(filePath, fileData, 0644)
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
+		document = &models.Document{
+			ID:          uuid.NewString(),
+			FileName:    fileHeader.Filename,
+			ContentType: http.DetectContentType(fileData),
+			FilePath:    filePath,
+			CreatedAt:   time.Now(),
+		}
 	} else {
 		document = nil
 	}

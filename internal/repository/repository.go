@@ -9,6 +9,7 @@ type CompensationRepo interface {
 	GetTotalSearchCompensationsCount(locationOrHospital string) (int, error)
 	GetTotalCompensationsCount() (int, error)
 	GetVerificationDocument(ID int) (*models.Document, error)
+	GetDocumentMetaDataById(ID int) (models.Compensation, error)
 }
 
 type UserRepo interface {

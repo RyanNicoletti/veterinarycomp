@@ -59,7 +59,7 @@ func (dbRepo *pgUserRepo) Authenticate(email, password string) (int, string, err
 
 	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	if err == bcrypt.ErrMismatchedHashAndPassword {
-		return 0, "", errors.New("Incorrect email or password")
+		return 0, "", errors.New("incorrect email or password")
 	} else if err != nil {
 		return 0, "", err
 	}

@@ -25,6 +25,14 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {
+	if _, err := os.Stat("./uploads"); os.IsNotExist(err) {
+		err := os.Mkdir("./uploads", 0755)
+		if err != nil {
+			fmt.Println("Error creating upload directory:", err)
+			os.Exit(1)
+		}
+	}
+
 	gob.Register(models.Compensation{})
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)

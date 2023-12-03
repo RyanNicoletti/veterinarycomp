@@ -39,7 +39,7 @@ func (dbRepo *pgCompensationRepo) GetAllCompensation(limit, offset int) ([]model
 	var compensations = []models.Compensation{}
 	for rows.Next() {
 		var compensation = models.Compensation{}
-		var verificationDocumentData []byte
+		var dbyte []byte
 		err := rows.Scan(&compensation.ID,
 			&compensation.CompanyName,
 			&compensation.JobTitle,
@@ -51,19 +51,21 @@ func (dbRepo *pgCompensationRepo) GetAllCompensation(limit, offset int) ([]model
 			&compensation.SignOnBonus,
 			&compensation.Production,
 			&compensation.TotalCompensation,
-			&verificationDocumentData,
+			&dbyte,
 			&compensation.Verified,
 			&compensation.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-
-		if len(verificationDocumentData) > 0 {
-			var document models.Document
-			if err := json.Unmarshal(verificationDocumentData, &document); err != nil {
+		if len(dbyte) > 0 {
+			var d *models.Document
+			err := json.Unmarshal(dbyte, &d)
+			if err != nil {
 				return nil, err
 			}
-			compensation.VerificationDocument = &document
+			compensation.VerificationDocument = d
+		} else {
+			compensation.VerificationDocument = nil
 		}
 
 		compensations = append(compensations, compensation)
@@ -75,13 +77,9 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	var verificationDocument []byte
-	if comp.VerificationDocument != nil {
-		var err error
-		verificationDocument, err = json.Marshal(comp.VerificationDocument)
-		if err != nil {
-			return err
-		}
+	jsonDoc, e := json.Marshal(comp.VerificationDocument)
+	if e != nil {
+		return e
 	}
 
 	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, date_created)
@@ -90,7 +88,7 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 	_, err := dbRepo.DB.ExecContext(ctx, query,
 		comp.CompanyName, comp.JobTitle, comp.PracticeType, comp.BoardCertification, comp.Location,
 		comp.YearsExperience, comp.BaseSalary, comp.SignOnBonus, comp.Production, comp.TotalCompensation,
-		verificationDocument, comp.Verified, time.Now())
+		jsonDoc, comp.Verified, time.Now())
 
 	if err != nil {
 		return err
@@ -173,4 +171,25 @@ func (dbRepo *pgCompensationRepo) GetVerificationDocument(ID int) (*models.Docum
 	}
 
 	return &document, nil
+}
+
+func (dbRepo *pgCompensationRepo) GetDocumentMetaDataById(ID int) (models.Compensation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	var c models.Compensation
+	var b []byte
+	query := `SELECT verification_document from  compensations WHERE id = $1`
+	err := dbRepo.DB.QueryRowContext(ctx, query, ID).Scan(&b)
+	if err != nil {
+		return c, err
+	}
+	if len(b) > 0 {
+		var d *models.Document
+		err := json.Unmarshal(b, &d)
+		if err != nil {
+			return c, err
+		}
+		c.VerificationDocument = d
+	}
+	return c, nil
 }

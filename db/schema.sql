@@ -12,7 +12,7 @@ CREATE TABLE compensations (
     sign_on_bonus NUMERIC,
     production NUMERIC,
     total_comp NUMERIC,
-    verification_document BYTEA,
+    verification_document JSONB,
     verified BOOLEAN,
     date_created TIMESTAMP DEFAULT now() NOT NULL
 );
