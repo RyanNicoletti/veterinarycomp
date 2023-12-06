@@ -88,7 +88,7 @@ input {
   margin-right: 10px;
 }
 .company-name {
-  color: darkblue;
+  color: blue;
 }
 .location {
   color: black;
@@ -110,4 +110,45 @@ input {
 }
 .experience-header {
   width: 10%;
+}
+
+.total-comp {
+  display: flex;
+  align-items: center;
+}
+#tooltip {
+  position: relative;
+  border-radius: 100%;
+  color: rgb(26, 155, 26);
+}
+
+#tooltip:before,
+#tooltip:after {
+  position: absolute;
+  content: "";
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#tooltip:after {
+  content: attr(data-tooltip);
+  color: black;
+  background-color: rgb(254, 254, 254);
+  width: 160px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 300;
+  top: -20px;
+  right: -200px;
+  padding: 10px;
+  padding-bottom: 20px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  transform: translateY(20px);
+}
+
+#tooltip:hover::before,
+#tooltip:hover::after {
+  opacity: 1;
+  transform: translateY(-2px);
 }

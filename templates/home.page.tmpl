@@ -1,6 +1,9 @@
 {{template "base" .}}
 {{define "content"}}
 <link rel="stylesheet" type="text/css" href="/static/css/home.css" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 <div class="container">
   <div class="table-actions">
     <form action="/search-comp" method="get">
@@ -48,19 +51,33 @@
       </td>
       <td class="experience">{{ .YearsExperience }}</td>
       <td class="total-comp">
-        Total Compensation:
-        <span id="formattedNumber">{{.TotalCompensation}}</span>
-        <div class="base-salary">
-          Base salary:
-          <span id="formattedNumber">{{.BaseSalary}}</span>
+        <div>
+          Total Compensation:
+          <span id="formattedNumber">{{.TotalCompensation}}</span>
+          <div class="base-salary">
+            Base salary:
+            <span id="formattedNumber">{{.BaseSalary}}</span>
+          </div>
+          <div class="sign-on">
+            Sign on bonus:
+            <span id="formattedNumber">{{.SignOnBonus}}</span>
+          </div>
+          <div class="production">
+            Production:
+            <span id="formattedNumber">{{.Production}}</span>
+          </div>
         </div>
-        <div class="sign-on">
-          Sign on bonus:
-          <span id="formattedNumber">{{.SignOnBonus}}</span>
-        </div>
-        <div class="production">
-          Production:
-          <span id="formattedNumber">{{.Production}}</span>
+        <div>
+          {{ if .Verified}}
+          <span
+            id="tooltip"
+            data-tooltip="This salary data has been verified, click to learn more"
+            >verified
+            <a href="/about#verification"
+              ><i class="fa fa-question-circle"></i
+            ></a>
+          </span>
+          {{ end }}
         </div>
       </td>
     </tr>
