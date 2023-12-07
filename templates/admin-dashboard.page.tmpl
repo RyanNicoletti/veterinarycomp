@@ -16,12 +16,11 @@
     <th>Compensation (USD)</th>
     <th>Verification</th>
   </tr>
-  {{
-    range.Data.compensations
-  }}
+  {{ range.Data.compensations }}
   <tr id="comp-row-{{.ID}}">
     <td class="company-name">
-      {{ .CompanyName }}<br />
+      {{ .CompanyName }}
+      <br />
       <div class="location">({{ .Location }})</div>
     </td>
     <td class="job-title">
@@ -47,9 +46,11 @@
     </td>
     <td class="verification">
       {{if .VerificationDocument }}
-      <a href="/admin/download-verification?ID={{.ID}}">
-        {{ .VerificationDocument.FileName }}</a
-      >
+      <a
+        href="/admin/download-verification?ID={{.ID}}"
+        id="comp-row-doc-{{.ID}}">
+        {{ .VerificationDocument.FileName }}
+      </a>
       {{else}}
       No verification provided
       {{ end }}
@@ -72,7 +73,16 @@
         hx-confirm="Are you sure you want to delete this compensation?"
         hx-target="#comp-row-{{.ID}}"
         hx-swap="outerHTML">
-        Delete
+        Delete Row
+      </button>
+      <!-- prettier-ignore -->
+      <button
+        hx-patch="/admin/delete-comp-doc?ID={{.ID}}"
+        hx-headers='{"X-CSRF-Token": "{{ $csrf }}"}'
+        hx-confirm="Are you sure you want to delete the file?"
+        hx-target="#comp-row-doc-{{.ID}}"
+        hx-swap="outerHTML">
+        Delete verification doc
       </button>
       <span id="verify-comp-{{.ID}}"></span>
       {{ if .Verified }}
@@ -80,9 +90,7 @@
       {{ end }}
     </td>
   </tr>
-  {{
-    end
-  }}
+  {{ end }}
 </table>
 {{ end }}
 <script

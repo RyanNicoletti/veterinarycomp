@@ -15,9 +15,9 @@
         placeholder="Search by location or hospital" />
       <button type="submit">Search</button>
       {{if .IsSearchPerformed}}
-      <span id="clear-search" style="display: inline"
-        ><a href="/">clear search</a></span
-      >
+      <span id="clear-search" style="display: inline">
+        <a href="/">clear search</a>
+      </span>
       {{ end }}
     </form>
     <div>
@@ -35,14 +35,25 @@
         <div>(type of practice)</div>
       </th>
       <th class="experience-header">Years of Experience</th>
-      <th>Compensation (USD)</th>
+      <th class="comp-header">
+        Compensation (USD)
+        <span class="tooltip-container">
+          <div class="tooltip">
+            <a href="/about#verification">
+              <i class="fa fa-question-circle"></i>
+            </a>
+            <span class="tooltiptext">
+              Check marks indicate verified compensations. Click to learn more.
+            </span>
+          </div>
+        </span>
+      </th>
     </tr>
-    {{
-      range.Data.compensations
-    }}
+    {{ range.Data.compensations }}
     <tr>
       <td class="company-name">
-        {{ .CompanyName }}<br />
+        {{ .CompanyName }}
+        <br />
         <div class="location">({{ .Location }})</div>
       </td>
       <td class="job-title">
@@ -67,23 +78,14 @@
             <span id="formattedNumber">{{.Production}}</span>
           </div>
         </div>
-        <div>
+        <div class="verification-container">
           {{ if .Verified}}
-          <span
-            id="tooltip"
-            data-tooltip="This salary data has been verified, click to learn more"
-            >verified
-            <a href="/about#verification"
-              ><i class="fa fa-question-circle"></i
-            ></a>
-          </span>
+          <span>&#10004;</span>
           {{ end }}
         </div>
       </td>
     </tr>
-    {{
-      end
-    }}
+    {{ end }}
   </table>
   <div class="pagination">
     {{if .IsSearchPerformed}}
@@ -91,9 +93,9 @@
       {{if (gt .Data.page.CurrentPage 1)}}
       <li>
         <a
-          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Previous }}"
-          >{{.Data.page.Previous}}</a
-        >
+          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Previous }}">
+          {{.Data.page.Previous}}
+        </a>
       </li>
       {{
         end
@@ -102,9 +104,9 @@
       {{if (lt .Data.page.CurrentPage .Data.page.TotalPage)}}
       <li>
         <a
-          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Next }}"
-          >{{.Data.page.Next}}</a
-        >
+          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Next }}">
+          {{.Data.page.Next}}
+        </a>
       </li>
       {{
         end
@@ -112,9 +114,9 @@
       {{if and (eq .Data.page.CurrentPage 1) (gt .Data.page.TotalPage 2)}}
       <li>
         <a
-          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page=3"
-          >3</a
-        >
+          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page=3">
+          3
+        </a>
       </li>
       {{
         end
@@ -148,7 +150,7 @@
 </div>
 
 {{ end }}
-{{ define "js" }}
+
 <script>
   const formatWithCommas = (value) => {
     return new Intl.NumberFormat("en-US").format(value);
@@ -161,4 +163,3 @@
     });
   });
 </script>
-{{ end }}

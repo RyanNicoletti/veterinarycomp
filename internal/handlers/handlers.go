@@ -219,14 +219,7 @@ func (repo *Repository) VerifyComp(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-
-	c, err := Repo.CompensationDBRepo.GetCompensationByID(ID)
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
-	}
-	data := map[string]interface{}{"compensation": c}
-	render.Template(w, r, "checkmark.page.tmpl", &models.TemplateData{Data: data})
+	w.Write([]byte(`<span class="checkmark">&#9745;</span>`))
 }
 
 func (repo *Repository) DeleteComp(w http.ResponseWriter, r *http.Request) {
@@ -236,7 +229,31 @@ func (repo *Repository) DeleteComp(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-	//render.Template(w, r, "blank.page.tmpl", &models.TemplateData{})
+}
+
+func (repo *Repository) DeleteCompDocument(w http.ResponseWriter, r *http.Request) {
+	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
+	c, err := Repo.CompensationDBRepo.GetCompensationByID(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	if c.VerificationDocument == nil {
+		return
+	}
+	// delete metadata
+	err = Repo.CompensationDBRepo.DeleteCompensationDocumentByID(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	// delete file
+	err = os.Remove(c.VerificationDocument.FilePath)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	w.Write([]byte(`<span>No verification provided</span>`))
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {

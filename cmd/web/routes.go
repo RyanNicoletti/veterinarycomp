@@ -32,6 +32,7 @@ func routes(app *config.AppConfig) http.Handler {
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
 		mux.Patch("/verify-comp", handlers.Repo.VerifyComp)
 		mux.Delete("/delete-comp", handlers.Repo.DeleteComp)
+		mux.Patch("/delete-comp-doc", handlers.Repo.DeleteCompDocument)
 		mux.Get("/download-verification", handlers.Repo.DownloadVerification)
 	})
 	staticFileServer := http.FileServer(http.Dir("./static/"))

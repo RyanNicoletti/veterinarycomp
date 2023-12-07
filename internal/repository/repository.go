@@ -12,6 +12,7 @@ type CompensationRepo interface {
 	GetTotalCompensationsCount() (int, error)
 	GetVerificationDocument(ID int) (*models.Document, error)
 	GetDocumentMetaDataById(ID int) (models.Compensation, error)
+	DeleteCompensationDocumentByID(ID int) error
 	VerifyComp(ID int) error
 }
 

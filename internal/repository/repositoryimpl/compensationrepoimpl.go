@@ -210,7 +210,7 @@ func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensati
 	defer cancel()
 	query := `SELECT * from compensations WHERE id = $1`
 	var c models.Compensation
-	var verificationDocument sql.NullString
+	var b []byte
 	err := dbRepo.DB.QueryRowContext(ctx, query, ID).Scan(&c.ID,
 		&c.CompanyName,
 		&c.JobTitle,
@@ -222,11 +222,19 @@ func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensati
 		&c.SignOnBonus,
 		&c.Production,
 		&c.TotalCompensation,
-		&verificationDocument,
+		&b,
 		&c.Verified,
 		&c.CreatedAt)
 	if err != nil {
 		return c, err
+	}
+	if len(b) > 0 {
+		var d *models.Document
+		err := json.Unmarshal(b, &d)
+		if err != nil {
+			return c, err
+		}
+		c.VerificationDocument = d
 	}
 	return c, nil
 }
@@ -235,6 +243,18 @@ func (dbRepo *pgCompensationRepo) DeleteCompensationByID(ID int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	query := `DELETE FROM compensations WHERE id = $1`
+	_, err := dbRepo.DB.ExecContext(ctx, query, ID)
+	// handle errors here better-what if no row is deleted?
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (dbRepo *pgCompensationRepo) DeleteCompensationDocumentByID(ID int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := `UPDATE compensations SET verification_document = NULL WHERE id = $1`
 	_, err := dbRepo.DB.ExecContext(ctx, query, ID)
 	// handle errors here better-what if no row is deleted?
 	if err != nil {
