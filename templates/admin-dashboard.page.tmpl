@@ -19,7 +19,7 @@
   {{
     range.Data.compensations
   }}
-  <tr>
+  <tr id="comp-row-{{.ID}}">
     <td class="company-name">
       {{ .CompanyName }}<br />
       <div class="location">({{ .Location }})</div>
@@ -55,19 +55,28 @@
       {{ end }}
     </td>
     <td class="verify-comp">
-      <form action="/admin/verify-comp" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ $csrf }}" />
-        <input type="hidden" name="id" value="{{.ID}}" />
-        <button type="submit">Verify Comp</button>
-      </form>
+      <!-- prettier-ignore -->
+      <button
+        hx-patch="/admin/verify-comp?ID={{.ID}}"
+        hx-headers='{"X-CSRF-Token": "{{ $csrf }}"}'
+        hx-trigger="click"
+        hx-confirm="Are you sure you want to verify this compensation?"
+        hx-swap="outerHTML"
+        hx-target="#verify-comp-{{.ID}}">
+        Verify
+      </button>
+      <!-- prettier-ignore -->
       <button
         hx-delete="/admin/delete-comp?ID={{.ID}}"
-        hx-trigger="click"
-        hx-confirm="Are you sure you want to delete this compensation?">
-        Reject Comp
+        hx-headers='{"X-CSRF-Token": "{{ $csrf }}"}'
+        hx-confirm="Are you sure you want to delete this compensation?"
+        hx-target="#comp-row-{{.ID}}"
+        hx-swap="outerHTML">
+        Delete
       </button>
-      {{ if .Verified}}
-      <span>&#9745;</span>
+      <span id="verify-comp-{{.ID}}"></span>
+      {{ if .Verified }}
+      <span id="verify-comp-{{.ID}}" class="checkmark">&#9745;</span>
       {{ end }}
     </td>
   </tr>
@@ -76,3 +85,7 @@
   }}
 </table>
 {{ end }}
+<script
+  src="https://unpkg.com/htmx.org@1.9.9"
+  integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+  crossorigin="anonymous"></script>

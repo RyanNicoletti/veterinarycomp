@@ -213,13 +213,30 @@ func (repo *Repository) DownloadVerification(w http.ResponseWriter, r *http.Requ
 }
 
 func (repo *Repository) VerifyComp(w http.ResponseWriter, r *http.Request) {
-	ID, _ := strconv.Atoi(r.PostFormValue("id"))
+	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
 	err := Repo.CompensationDBRepo.VerifyComp(ID)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
+
+	c, err := Repo.CompensationDBRepo.GetCompensationByID(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data := map[string]interface{}{"compensation": c}
+	render.Template(w, r, "checkmark.page.tmpl", &models.TemplateData{Data: data})
+}
+
+func (repo *Repository) DeleteComp(w http.ResponseWriter, r *http.Request) {
+	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
+	err := Repo.CompensationDBRepo.DeleteCompensationByID(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	//render.Template(w, r, "blank.page.tmpl", &models.TemplateData{})
 }
 
 func (repo *Repository) CompForm(w http.ResponseWriter, r *http.Request) {

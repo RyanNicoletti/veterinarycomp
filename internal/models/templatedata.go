@@ -1,6 +1,8 @@
 package models
 
-import "github.com/ryannicoletti/veterinarycomp/internal/forms"
+import (
+	"github.com/ryannicoletti/veterinarycomp/internal/forms"
+)
 
 // holds data send from handlers to templates
 type TemplateData struct {

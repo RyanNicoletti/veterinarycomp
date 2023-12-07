@@ -29,9 +29,9 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(Auth)
 		mux.Use(Admin)
-		mux.Use(NoSurf)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
-		mux.Post("/verify-comp", handlers.Repo.VerifyComp)
+		mux.Patch("/verify-comp", handlers.Repo.VerifyComp)
+		mux.Delete("/delete-comp", handlers.Repo.DeleteComp)
 		mux.Get("/download-verification", handlers.Repo.DownloadVerification)
 	})
 	staticFileServer := http.FileServer(http.Dir("./static/"))
