@@ -31,6 +31,7 @@ func routes(app *config.AppConfig) http.Handler {
 		mux.Use(Admin)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
 		mux.Patch("/verify-comp", handlers.Repo.VerifyComp)
+		mux.Patch("/approve-comp", handlers.Repo.ApproveComp)
 		mux.Delete("/delete-comp", handlers.Repo.DeleteComp)
 		mux.Patch("/delete-comp-doc", handlers.Repo.DeleteCompDocument)
 		mux.Get("/download-verification", handlers.Repo.DownloadVerification)

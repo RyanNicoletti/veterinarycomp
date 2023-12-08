@@ -258,6 +258,17 @@ func (dbRepo *pgCompensationRepo) VerifyComp(ID int) error {
 	return nil
 }
 
+func (dbRepo *pgCompensationRepo) ApproveComp(ID int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := `UPDATE compensations SET approved = TRUE WHERE id = $1`
+	_, err := dbRepo.DB.ExecContext(ctx, query, ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

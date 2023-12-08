@@ -15,6 +15,7 @@ type CompensationRepo interface {
 	GetDocumentMetaDataById(ID int) (models.Compensation, error)
 	DeleteCompensationDocumentByID(ID int) error
 	VerifyComp(ID int) error
+	ApproveComp(ID int) error
 }
 
 type UserRepo interface {

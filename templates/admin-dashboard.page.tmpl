@@ -58,6 +58,16 @@
     <td class="verify-comp">
       <!-- prettier-ignore -->
       <button
+        hx-patch="/admin/approve-comp?ID={{.ID}}"
+        hx-headers='{"X-CSRF-Token": "{{ $csrf }}"}'
+        hx-trigger="click"
+        hx-confirm="Are you sure you want to approve this compensation? This will send the data to the home page."
+        hx-swap="outerHTML"
+        hx-target="#comp-row-{{.ID}}">
+        Approve
+      </button>
+      <!-- prettier-ignore -->
+      <button
         hx-patch="/admin/verify-comp?ID={{.ID}}"
         hx-headers='{"X-CSRF-Token": "{{ $csrf }}"}'
         hx-trigger="click"

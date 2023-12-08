@@ -222,6 +222,16 @@ func (repo *Repository) VerifyComp(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`<span class="checkmark">&#9745;</span>`))
 }
 
+func (repo *Repository) ApproveComp(w http.ResponseWriter, r *http.Request) {
+	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
+	err := Repo.CompensationDBRepo.ApproveComp(ID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	return
+}
+
 func (repo *Repository) DeleteComp(w http.ResponseWriter, r *http.Request) {
 	ID, _ := strconv.Atoi(r.URL.Query().Get("ID"))
 	err := Repo.CompensationDBRepo.DeleteCompensationByID(ID)

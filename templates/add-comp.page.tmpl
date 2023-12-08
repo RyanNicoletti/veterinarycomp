@@ -15,125 +15,132 @@
       <div class="fieldset-label">Hospital/Company Information</div>
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
       <div class="form-group">
-        <label for="company-name"
-          >Hospital/Company Name:{{with .Form.Errors.Get "company-name"}}
-          <label class="text-danger">{{.}}</label>
-          {{ end }}
-        </label>
+        <label for="company-name"></label>
+        Hospital/Company Name:{{with .Form.Errors.Get "company-name"}}
+        <label class="text-danger">{{.}}</label>
+        {{ end }}
         <!-- prettier-ignore -->
         <input required type="text" name="company-name" placeholder="Banfield Pet Hospital" 
         class="{{with .Form.Errors.Get "company-name"}} is-invalid {{ end }}"
-        value="{{$comp.CompanyName}}" />
+        value="{{ $comp.CompanyName }}" />
       </div>
       <div class="form-group">
-        <label for="location"
-          >Location: {{with .Form.Errors.Get "location"}}
+        <label for="location">
+          Location: {{with .Form.Errors.Get "location"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label
-        >
+          {{ end }}
+        </label>
         <input type="text" id="location" name="location" required class="{{with .Form.Errors.Get "location"}}
-        is-invalid {{ end }}"
-        value="{{$comp.Location}}" />
+        is-invalid {{ end }}" value="{{ $comp.Location }}" />
       </div>
     </fieldset>
     <fieldset class="job-info">
       <div class="fieldset-label">Job Information</div>
       <div class="form-group">
-        <label for="job-title"
-          >Title: {{with .Form.Errors.Get "job-title"}}
+        <label for="job-title">
+          Title: {{with .Form.Errors.Get "job-title"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label
-        >
-        <!-- prettier-ignore -->
-        <input required type="text" name="job-title" placeholder="Associate Veterinarian" 
-        class="{{with .Form.Errors.Get "job-title"}} is-invalid {{ end }}"  
-        value="{{$comp.JobTitle}}"/>
+          {{ end }}
+        </label>
+        <input required type="text" name="job-title" placeholder="Associate
+        Veterinarian" class="{{with .Form.Errors.Get "job-title"}} is-invalid
+        {{ end }}" value="{{ $comp.JobTitle }}"/>
       </div>
       <div class="form-group">
-        <label for="type-of-practice" class="practice-type-label"
-          >Type of Practice: {{with .Form.Errors.Get "type-of-practice"}}
+        <label for="type-of-practice" class="practice-type-label">
+          Type of Practice: {{with .Form.Errors.Get "type-of-practice"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label
-        >
-        <select
-          id="type-of-practice"
-          name="type-of-practice"
-          onchange="toggleSpecializationInput()"
-          value="{{$comp.PracticeType}}"
-          class="{{with .Form.Errors.Get "type-of-practice"}} is-invalid
+          {{ end }}
+        </label>
+        <select id="type-of-practice" name="type-of-practice"
+        onchange="toggleSpecializationInput()" value="{{ $comp.PracticeType }}"
+        class="{{with .Form.Errors.Get "type-of-practice"}} is-invalid
         {{ end }}">
-          <option value="small animal medicine and surgery (gp)">
-            Small Animal Medicine and Surgery (GP)
-          </option>
-          <option value="small animal medicine (gp)">
-            Small Animal Medicine (GP)
-          </option>
-          <option value="equine ambulatory">Equine Ambulatory</option>
-          <option value="equine medicine surgery">
-            Equine Medicine and Surgery
-          </option>
-          <option value="mixed animal practice">Mixed Animal</option>
-          <option value="exotics">Exotics</option>
-          <option value="food animal">Food Animal</option>
-          <option value="shelter medicine">Shelter Medicine</option>
-          <option value="research">Research/Industry</option>
-          <option value="specialization">Specialty Practice (small animal)</option>
-          <option value="specialization">Specialty Practice (large animal)</option>
-          <option value="other">Other</option>
+        <option value="small animal medicine and surgery (gp)">
+          Small Animal Medicine and Surgery (GP)
+        </option>
+        <option value="small animal medicine (gp)">
+          Small Animal Medicine (GP)
+        </option>
+        <option value="equine ambulatory">Equine Ambulatory</option>
+        <option value="equine medicine surgery">
+          Equine Medicine and Surgery
+        </option>
+        <option value="mixed animal practice">Mixed Animal</option>
+        <option value="exotics">Exotics</option>
+        <option value="food animal">Food Animal</option>
+        <option value="shelter medicine">Shelter Medicine</option>
+        <option value="research">Research/Industry</option>
+        <option value="specialization">
+          Specialty Practice (small animal)
+        </option>
+        <option value="specialization">
+          Specialty Practice (large animal)
+        </option>
+        <option value="government">Government</option>
+        <option value="other">Other</option>
         </select>
       </div>
 
       <div style="display: none" id="specialization-input">
-        <label for="board-certification">Board Certification: {{with .Form.Errors.Get "specialization-input"}}
+        <label for="board-certification">
+          Specialty/Board Certification:
+          {{with .Form.Errors.Get "specialization-input"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label>
+          {{ end }}
+        </label>
         <div>
-          <input
-          type="text"
-          id="board-certification"
-          name="board-certification" 
+          <input type="text" id="board-certification" name="board-certification"
           class="{{with .Form.Errors.Get "specialization-input"}} is-invalid
-        {{ end }}"/>
+          {{ end }}"/>
         </div>
       </div>
     </fieldset>
     <fieldset class="experience-salary-info">
       <div class="fieldset-label">Experience and Salary Information</div>
       <div class="form-group">
-        <label for="years-experience">Years of Experience: {{with .Form.Errors.Get "years-experience"}}
+        <label for="years-experience">
+          Years of Experience: {{with .Form.Errors.Get "years-experience"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label>
-        <input
-          type="text"
-          inputmode="numeric"
-          id="years-experience"
-          name="years-experience" 
-          class="{{with .Form.Errors.Get "years-experience"}} is-invalid
-        {{ end }}"
-        value="{{.Form.Get "years-experience"}}"
-        />
+          {{ end }}
+        </label>
+        <input type="text" inputmode="numeric" id="years-experience"
+        name="years-experience" class="{{with .Form.Errors.Get "years-experience"}}
+        is-invalid {{ end }}" value="{{.Form.Get "years-experience"}}" />
       </div>
       <div id="base-salary-input" class="form-group">
-        <label for="base-salary">Base Salary: {{with .Form.Errors.Get "base-salary"}}
+        <label for="base-salary">
+          Base Salary: {{with .Form.Errors.Get "base-salary"}} 
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label>
-        <input
-          type="text"
-          inputmode="numeric"
-          id="base-salary"
-          name="base-salary"
-          required 
-          class="{{with .Form.Errors.Get "base-salary"}} is-invalid {{ end }}" 
-          value="$ {{.Form.Get "base-salary"}}"
-          oninput="formatMoneyNumbers(this)"/>
+          {{ end }}
+        </label>
+        <input type="text" inputmode="numeric" id="base-salary"
+        name="base-salary" required class="{{with .Form.Errors.Get "base-salary"}}
+        is-invalid {{ end }}" value="$ {{.Form.Get "base-salary"}}"
+        oninput="formatMoneyNumbers(this)"/>
       </div>
+      <div id="hourly-rate-input" class="form-group" style="display: none">
+        <label for="hourly-rate">
+          Hourly Rate: {{with .Form.Errors.Get "hourly-rate"}}
+          <label class="text-danger">{{.}}</label>
+          {{ end }}
+        </label>
+        <input type="text" inputmode="numeric" id="hourly-rate"
+        name="hourly-rate" required class="{{with .Form.Errors.Get "hourly-rate"}}
+        is-invalid {{ end }}" value="$ {{.Form.Get "hourly-rate"}}"
+        oninput="formatMoneyNumbers(this)"/> /hr
+      </div>
+      <div class="convert-to-hourly" onclick="toggleSalaryType()">
+        Click to Convert to Hourly Rate
+    </div>
       <div class="additional-salary-btn-container">
         <button
           type="button"
           onclick="toggleSalaryElements('sign-on-bonus')"
           class="additional-salary-btn">
-          Add Sign On Bonus</button
-        ><button
+          Add Sign On Bonus
+        </button>
+        <button
           type="button"
           onclick="toggleSalaryElements('production')"
           class="additional-salary-btn">
@@ -141,27 +148,26 @@
         </button>
       </div>
       <div id="sign-on-bonus" style="display: none" class="form-group">
-        <label for="sign-on-bonus">Sign-on Bonus: {{with .Form.Errors.Get "sign-on-bonus"}}
+        <label for="sign-on-bonus">
+          Sign-on Bonus: {{with .Form.Errors.Get "sign-on-bonus"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label>
-        <div><input
-          type="text"
-          inputmode="numeric"
-          id="sign-on-bonus"
-          name="sign-on-bonus" 
-          class="{{with .Form.Errors.Get "sign-on-bonus"}} is-invalid {{ end }}" 
-          value="$ {{.Form.Get "sign-on-bonus"}}"
-          oninput="formatMoneyNumbers(this)"/></div>
+          {{ end }}
+        </label>
+        <div>
+          <input type="text" inputmode="numeric" id="sign-on-bonus"
+          name="sign-on-bonus" class="{{with .Form.Errors.Get "sign-on-bonus"}}
+          is-invalid {{ end }}" value="$ {{.Form.Get "sign-on-bonus"}}"
+          oninput="formatMoneyNumbers(this)"/>
+        </div>
       </div>
       <div id="production" style="display: none" class="form-group">
-        <label for="production">Production: {{with .Form.Errors.Get "production"}}
+        <label for="production">
+          Production: {{with .Form.Errors.Get "production"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label>
-          <div>
-        <input
-          type="text"
-          inputmode="numeric"
-          id="production"
+          {{ end }}
+        </label>
+        <div>
+          <input type="text" inputmode="numeric" id="production"
           name="production" value="$ {{.Form.Get "production"}}"
           oninput="formatMoneyNumbers(this)"/>
         </div>
@@ -169,15 +175,14 @@
     </fieldset>
     <fieldset class="verification-info">
       <div class="form-group">
-        <label for="verification-document">Upload Verification: {{with .Form.Errors.Get "verification-document"}}
+        <label for="verification-document">
+          Upload Verification: {{with .Form.Errors.Get "verification-document"}}
           <label class="text-danger">{{.}}</label>
-          {{ end }}</label>
-        <input
-          type="file"
-          id="verification-document"
-          name="verification-document" 
-          class="{{with .Form.Errors.Get "verification-document"}} is-invalid
-        {{ end }}" value="{{$comp.VerificationDocument}}" />
+          {{ end }}
+        </label>
+        <input type="file" id="verification-document"
+        name="verification-document" class="{{with .Form.Errors.Get "verification-document"}}
+        is-invalid {{ end }}" value="{{ $comp.VerificationDocument }}" />
       </div>
     </fieldset>
     <div>
@@ -189,6 +194,7 @@
 {{ end }}
 
 <script>
+  let isHourlyRate = false;
   function toggleSpecializationInput() {
     const typeOfPracticeSelect = document.getElementById("type-of-practice");
     const specializationInput = document.getElementById("specialization-input");
@@ -207,10 +213,29 @@
     }
   }
   function formatMoneyNumbers(input) {
-    let value = input.value.replace(/[^0-9]/g, '');
+    let value = input.value.replace(/[^0-9]/g, "");
     if (value !== "") {
-        value = new Intl.NumberFormat().format(value);
+      value = new Intl.NumberFormat().format(value);
     }
-    input.value = '$' + value;
+    input.value = "$" + value;
+  }
+  function toggleSalaryType() {
+      isHourlyRate = !isHourlyRate;
+      const baseSalaryInput = document.getElementById('base-salary-input');
+        const hourlyRateInput = document.getElementById('hourly-rate-input');
+        const baseSalaryLabel = document.querySelector('label[for="base-salary"]');
+        const hourlyRateLabel = document.querySelector('label[for="hourly-rate"]');
+
+        if (isHourlyRate) {
+            baseSalaryInput.style.display = 'none';
+            baseSalaryLabel.style.display = 'none';
+            hourlyRateInput.style.display = 'block';
+            hourlyRateLabel.style.display = 'block';
+        } else {
+            baseSalaryInput.style.display = 'block';
+            baseSalaryLabel.style.display = 'block';
+            hourlyRateInput.style.display = 'none';
+            hourlyRateLabel.style.display = 'none';
+        }
   }
 </script>
