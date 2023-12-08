@@ -51,14 +51,14 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	rowPerPage := 10
 	offset := rowPerPage * (page - 1)
 
-	c, err := Repo.CompensationDBRepo.GetAllCompensation(rowPerPage, offset)
+	c, err := Repo.CompensationDBRepo.GetAllApprovedCompensations(rowPerPage, offset)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 	data["compensations"] = c
 
-	total, err := Repo.CompensationDBRepo.GetTotalCompensationsCount()
+	total, err := Repo.CompensationDBRepo.GetApprovedCompensationsCount()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -171,7 +171,7 @@ func (repo *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (repo *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
-	c, err := Repo.CompensationDBRepo.GetAllCompensation(100, 0)
+	c, err := Repo.CompensationDBRepo.GetAllUnapprovedCompensations(100, 0)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -318,6 +318,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 		TotalCompensation:    totalComp,
 		VerificationDocument: document,
 		Verified:             false,
+		Approved:             false,
 		CreatedAt:            time.Now(),
 	}
 

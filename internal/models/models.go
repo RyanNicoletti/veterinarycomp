@@ -18,6 +18,7 @@ type Compensation struct {
 	TotalCompensation    float64
 	VerificationDocument *Document
 	Verified             bool
+	Approved             bool
 	CreatedAt            time.Time
 }
 

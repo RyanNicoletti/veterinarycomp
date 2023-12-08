@@ -14,6 +14,7 @@ CREATE TABLE compensations (
     total_comp NUMERIC,
     verification_document JSONB,
     verified BOOLEAN,
+    approved BOOLEAN,
     date_created TIMESTAMP DEFAULT now() NOT NULL
 );
 

@@ -26,11 +26,11 @@ func NewPostgresCompensationRepo(conn *sql.DB, a *config.AppConfig) repository.C
 	}
 }
 
-func (dbRepo *pgCompensationRepo) GetAllCompensation(limit, offset int) ([]models.Compensation, error) {
+func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations(limit, offset int) ([]models.Compensation, error) {
 	// if we cant insert within 3 seconds, cancel the transaction
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	query := `select * from compensations order by id limit $1 offset $2`
+	query := `select * from compensations WHERE approved = true order by id limit $1 offset $2`
 	rows, err := dbRepo.DB.QueryContext(ctx, query, limit, offset)
 	if err != nil {
 		return nil, err
@@ -53,6 +53,55 @@ func (dbRepo *pgCompensationRepo) GetAllCompensation(limit, offset int) ([]model
 			&compensation.TotalCompensation,
 			&dbyte,
 			&compensation.Verified,
+			&compensation.Approved,
+			&compensation.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		if len(dbyte) > 0 {
+			var d *models.Document
+			err := json.Unmarshal(dbyte, &d)
+			if err != nil {
+				return nil, err
+			}
+			compensation.VerificationDocument = d
+		} else {
+			compensation.VerificationDocument = nil
+		}
+
+		compensations = append(compensations, compensation)
+	}
+	return compensations, nil
+}
+
+func (dbRepo *pgCompensationRepo) GetAllUnapprovedCompensations(limit, offset int) ([]models.Compensation, error) {
+	// if we cant insert within 3 seconds, cancel the transaction
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := `select * from compensations WHERE approved = false order by id limit $1 offset $2`
+	rows, err := dbRepo.DB.QueryContext(ctx, query, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var compensations = []models.Compensation{}
+	for rows.Next() {
+		var compensation = models.Compensation{}
+		var dbyte []byte
+		err := rows.Scan(&compensation.ID,
+			&compensation.CompanyName,
+			&compensation.JobTitle,
+			&compensation.PracticeType,
+			&compensation.BoardCertification,
+			&compensation.Location,
+			&compensation.YearsExperience,
+			&compensation.BaseSalary,
+			&compensation.SignOnBonus,
+			&compensation.Production,
+			&compensation.TotalCompensation,
+			&dbyte,
+			&compensation.Verified,
+			&compensation.Approved,
 			&compensation.CreatedAt)
 		if err != nil {
 			return nil, err
@@ -82,13 +131,13 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 		return e
 	}
 
-	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, date_created)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`
+	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, approved, date_created)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`
 
 	_, err := dbRepo.DB.ExecContext(ctx, query,
 		comp.CompanyName, comp.JobTitle, comp.PracticeType, comp.BoardCertification, comp.Location,
 		comp.YearsExperience, comp.BaseSalary, comp.SignOnBonus, comp.Production, comp.TotalCompensation,
-		jsonDoc, comp.Verified, time.Now())
+		jsonDoc, comp.Verified, comp.Approved, time.Now())
 
 	if err != nil {
 		return err
@@ -102,8 +151,9 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	query := `SELECT * FROM compensations
-    WHERE location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M'
-	order by id limit $1 offset $2`
+    WHERE (location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M')
+	AND approved = true
+	ORDER BY id limit $1 offset $2`
 	rows, err := dbRepo.DB.QueryContext(ctx, query, rowPerPage, offset)
 	if err != nil {
 		return compensations, err
@@ -124,6 +174,7 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 			&compensation.TotalCompensation,
 			&compensation.VerificationDocument,
 			&compensation.Verified,
+			&compensation.Approved,
 			&compensation.CreatedAt)
 		if err != nil {
 			return compensations, err
@@ -134,7 +185,9 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 }
 
 func (dbRepo *pgCompensationRepo) GetTotalSearchCompensationsCount(locationOrHospital string) (int, error) {
-	query := `SELECT COUNT(*) FROM compensations WHERE location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M'`
+	query := `SELECT COUNT(*) FROM compensations
+    WHERE (location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M')
+    AND approved = true`
 	var count int
 	if err := dbRepo.DB.QueryRow(query).Scan(&count); err != nil {
 		return 0, err
@@ -142,11 +195,11 @@ func (dbRepo *pgCompensationRepo) GetTotalSearchCompensationsCount(locationOrHos
 	return count, nil
 }
 
-func (dbRepo *pgCompensationRepo) GetTotalCompensationsCount() (int, error) {
+func (dbRepo *pgCompensationRepo) GetApprovedCompensationsCount() (int, error) {
 	var total int
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	query := `SELECT COUNT(id) FROM compensations`
+	query := `SELECT COUNT(id) FROM compensations where approved = true`
 	err := dbRepo.DB.QueryRowContext(ctx, query).Scan(&total)
 	if err != nil {
 		return 0, err
@@ -224,6 +277,7 @@ func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensati
 		&c.TotalCompensation,
 		&b,
 		&c.Verified,
+		&c.Approved,
 		&c.CreatedAt)
 	if err != nil {
 		return c, err
