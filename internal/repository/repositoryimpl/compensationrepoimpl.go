@@ -54,6 +54,7 @@ func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations(limit, offset int)
 			&dbyte,
 			&compensation.Verified,
 			&compensation.Approved,
+			&compensation.IsHourly,
 			&compensation.CreatedAt)
 		if err != nil {
 			return nil, err
@@ -102,6 +103,7 @@ func (dbRepo *pgCompensationRepo) GetAllUnapprovedCompensations(limit, offset in
 			&dbyte,
 			&compensation.Verified,
 			&compensation.Approved,
+			&compensation.IsHourly,
 			&compensation.CreatedAt)
 		if err != nil {
 			return nil, err
@@ -137,7 +139,7 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 	_, err := dbRepo.DB.ExecContext(ctx, query,
 		comp.CompanyName, comp.JobTitle, comp.PracticeType, comp.BoardCertification, comp.Location,
 		comp.YearsExperience, comp.BaseSalary, comp.SignOnBonus, comp.Production, comp.TotalCompensation,
-		jsonDoc, comp.Verified, comp.Approved, time.Now())
+		jsonDoc, comp.Verified, comp.Approved, comp.IsHourly, time.Now())
 
 	if err != nil {
 		return err
@@ -175,6 +177,7 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 			&compensation.VerificationDocument,
 			&compensation.Verified,
 			&compensation.Approved,
+			&compensation.IsHourly,
 			&compensation.CreatedAt)
 		if err != nil {
 			return compensations, err
@@ -269,6 +272,7 @@ func (dbRepo *pgCompensationRepo) ApproveComp(ID int) error {
 	return nil
 }
 
+// fix b
 func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -289,6 +293,7 @@ func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensati
 		&b,
 		&c.Verified,
 		&c.Approved,
+		&c.IsHourly,
 		&c.CreatedAt)
 	if err != nil {
 		return c, err

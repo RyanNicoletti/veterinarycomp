@@ -288,6 +288,12 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 	yearsExperience, _ := form.StringToInt("years-experience")
 	totalComp := baseSalary + signOnBonus + production
 
+	isHourlyStr := form.Get("is-hourly")
+	isHourly, err := strconv.ParseBool(isHourlyStr)
+	if err != nil {
+		isHourly = false
+	}
+
 	var document *models.Document
 
 	if files, ok := r.MultipartForm.File["verification-document"]; ok && len(files) > 0 {
@@ -329,6 +335,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 		VerificationDocument: document,
 		Verified:             false,
 		Approved:             false,
+		IsHourly:             isHourly,
 		CreatedAt:            time.Now(),
 	}
 

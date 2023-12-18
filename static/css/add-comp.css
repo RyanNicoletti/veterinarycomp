@@ -45,14 +45,38 @@ button {
   margin-bottom: 10px;
 }
 .additional-salary-btn {
-  margin-right: 10px;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.additional-salary-btn:hover {
+  background-color: #45a049;
 }
 .add-comp-submit-btn {
-  font-weight: bold;
-  padding: 8px 14px;
+  background-color: #008cba;
+  border: none;
   border-radius: 5px;
-  background-color: #fff;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
+.add-comp-submit-btn:hover {
+  background-color: #0077a3;
+}
+
 .text-danger {
   color: red;
   align-self: first baseline;
@@ -67,4 +91,17 @@ button {
 
 #type-of-practice {
   margin-bottom: 10px;
+}
+
+.toggle-pay-type {
+  display: flex;
+}
+
+.convert-to-hourly {
+  cursor: pointer;
+  color: #007bff;
+}
+
+.convert-to-hourly:hover {
+  text-decoration: underline;
 }

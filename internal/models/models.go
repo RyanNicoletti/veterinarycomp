@@ -19,6 +19,7 @@ type Compensation struct {
 	VerificationDocument *Document
 	Verified             bool
 	Approved             bool
+	IsHourly             bool
 	CreatedAt            time.Time
 }
 

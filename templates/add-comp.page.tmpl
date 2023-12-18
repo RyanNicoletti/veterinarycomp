@@ -108,31 +108,39 @@
         name="years-experience" class="{{with .Form.Errors.Get "years-experience"}}
         is-invalid {{ end }}" value="{{.Form.Get "years-experience"}}" />
       </div>
+      <input type="hidden" id="is-hourly" name="is-hourly" value="false" />
       <div id="base-salary-input" class="form-group">
-        <label for="base-salary">
-          Base Salary: {{with .Form.Errors.Get "base-salary"}} 
-          <label class="text-danger">{{.}}</label>
-          {{ end }}
-        </label>
+        <div class="toggle-pay-type">
+          <label for="base-salary">
+            Base Salary: {{with .Form.Errors.Get "base-salary"}} 
+            <label class="text-danger">{{.}}</label>
+            {{ end }}
+          </label>
+          <div class="convert-to-hourly" onclick="toggleSalaryType()">
+            Convert to hourly pay
+          </div>
+        </div>
         <input type="text" inputmode="numeric" id="base-salary"
         name="base-salary" required class="{{with .Form.Errors.Get "base-salary"}}
         is-invalid {{ end }}" value="$ {{.Form.Get "base-salary"}}"
         oninput="formatMoneyNumbers(this)"/>
       </div>
       <div id="hourly-rate-input" class="form-group" style="display: none">
-        <label for="hourly-rate">
-          Hourly Rate: {{with .Form.Errors.Get "hourly-rate"}}
-          <label class="text-danger">{{.}}</label>
-          {{ end }}
-        </label>
+        <div class="toggle-pay-type">
+          <label for="hourly-rate">
+            Hourly Rate: {{with .Form.Errors.Get "hourly-rate"}}
+            <label class="text-danger">{{.}}</label>
+            {{ end }}
+          </label>
+          <div class="convert-to-hourly" onclick="toggleSalaryType()">
+            Convert to salaried pay
+          </div>
+        </div>
         <input type="text" inputmode="numeric" id="hourly-rate"
         name="hourly-rate" required class="{{with .Form.Errors.Get "hourly-rate"}}
         is-invalid {{ end }}" value="$ {{.Form.Get "hourly-rate"}}"
         oninput="formatMoneyNumbers(this)"/> /hr
       </div>
-      <div class="convert-to-hourly" onclick="toggleSalaryType()">
-        Click to Convert to Hourly Rate
-    </div>
       <div class="additional-salary-btn-container">
         <button
           type="button"
@@ -194,7 +202,6 @@
 {{ end }}
 
 <script>
-  let isHourlyRate = false;
   function toggleSpecializationInput() {
     const typeOfPracticeSelect = document.getElementById("type-of-practice");
     const specializationInput = document.getElementById("specialization-input");
@@ -219,23 +226,30 @@
     }
     input.value = "$" + value;
   }
+  let isHourlyRate = false;
   function toggleSalaryType() {
       isHourlyRate = !isHourlyRate;
       const baseSalaryInput = document.getElementById('base-salary-input');
-        const hourlyRateInput = document.getElementById('hourly-rate-input');
-        const baseSalaryLabel = document.querySelector('label[for="base-salary"]');
-        const hourlyRateLabel = document.querySelector('label[for="hourly-rate"]');
+      const hourlyRateInput = document.getElementById('hourly-rate-input');
+      const baseSalaryLabel = document.querySelector('label[for="base-salary"]');
+      const hourlyRateLabel = document.querySelector('label[for="hourly-rate"]');
+      const toggleText = document.querySelector('.convert-to-hourly');
+      const isHourlyInput = document.getElementById('is-hourly');
 
-        if (isHourlyRate) {
-            baseSalaryInput.style.display = 'none';
-            baseSalaryLabel.style.display = 'none';
-            hourlyRateInput.style.display = 'block';
-            hourlyRateLabel.style.display = 'block';
-        } else {
-            baseSalaryInput.style.display = 'block';
-            baseSalaryLabel.style.display = 'block';
-            hourlyRateInput.style.display = 'none';
-            hourlyRateLabel.style.display = 'none';
-        }
+      if (isHourlyRate) {
+          baseSalaryInput.style.display = 'none';
+          baseSalaryLabel.style.display = 'none';
+          hourlyRateInput.style.display = 'block';
+          hourlyRateLabel.style.display = 'block';
+          toggleText.innerText = 'Convert to salaried pay';
+          isHourlyInput.value = 'true';
+      } else {
+          baseSalaryInput.style.display = 'block';
+          baseSalaryLabel.style.display = 'block';
+          hourlyRateInput.style.display = 'none';
+          hourlyRateLabel.style.display = 'none';
+          toggleText.innerText = 'Convert to hourly pay';
+          isHourlyInput.value = 'false';
+      }
   }
 </script>
