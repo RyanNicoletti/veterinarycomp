@@ -20,6 +20,7 @@ type Compensation struct {
 	Verified             bool
 	Approved             bool
 	IsHourly             bool
+	HourlyRate           float32
 	CreatedAt            time.Time
 }
 

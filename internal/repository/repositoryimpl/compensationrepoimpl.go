@@ -55,6 +55,7 @@ func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations(limit, offset int)
 			&compensation.Verified,
 			&compensation.Approved,
 			&compensation.IsHourly,
+			&compensation.HourlyRate,
 			&compensation.CreatedAt)
 		if err != nil {
 			return nil, err
@@ -104,6 +105,7 @@ func (dbRepo *pgCompensationRepo) GetAllUnapprovedCompensations(limit, offset in
 			&compensation.Verified,
 			&compensation.Approved,
 			&compensation.IsHourly,
+			&compensation.HourlyRate,
 			&compensation.CreatedAt)
 		if err != nil {
 			return nil, err
@@ -178,6 +180,7 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 			&compensation.Verified,
 			&compensation.Approved,
 			&compensation.IsHourly,
+			&compensation.HourlyRate,
 			&compensation.CreatedAt)
 		if err != nil {
 			return compensations, err
@@ -294,6 +297,7 @@ func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensati
 		&c.Verified,
 		&c.Approved,
 		&c.IsHourly,
+		&c.HourlyRate,
 		&c.CreatedAt)
 	if err != nil {
 		return c, err

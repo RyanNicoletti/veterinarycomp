@@ -8,7 +8,7 @@ body {
   height: 100%;
 }
 header {
-  margin-bottom: 140px;
+  margin-bottom: 80px;
 }
 body {
   background-color: #f5f5f5;
@@ -20,8 +20,8 @@ body {
 }
 
 .navbar {
-  background-color: lightblue;
-  position: fixed;
+  background-color: deepskyblue;
+  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;
@@ -34,6 +34,7 @@ body {
   margin: 20px;
   color: black;
   text-decoration: none;
+  font-size: 1.3rem;
 }
 
 .footer {

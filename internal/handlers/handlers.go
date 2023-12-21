@@ -282,16 +282,23 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 	form := forms.NewForm(r.PostForm)
 	form.TrimMoneyvalue("base-salary", "production", "sign-on-bonus")
 	form.Required("company-name", "location", "job-title", "base-salary")
-	baseSalary, _ := form.StringToFloat("base-salary")
 	signOnBonus, _ := form.StringToFloat("sign-on-bonus")
 	production, _ := form.StringToFloat("production")
 	yearsExperience, _ := form.StringToInt("years-experience")
-	totalComp := baseSalary + signOnBonus + production
 
 	isHourlyStr := form.Get("is-hourly")
 	isHourly, err := strconv.ParseBool(isHourlyStr)
 	if err != nil {
 		isHourly = false
+	}
+	var hourlyRate float64
+	var baseSalary float64
+	var totalComp float64
+	if isHourly == true {
+		hourlyRate, _ = form.StringToFloat("hourly-rate")
+	} else {
+		baseSalary, _ = form.StringToFloat("base-salary")
+		totalComp = baseSalary + signOnBonus + production
 	}
 
 	var document *models.Document
@@ -336,6 +343,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 		Verified:             false,
 		Approved:             false,
 		IsHourly:             isHourly,
+		HourlyRate:           float32(hourlyRate),
 		CreatedAt:            time.Now(),
 	}
 

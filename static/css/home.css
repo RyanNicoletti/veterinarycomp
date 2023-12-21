@@ -121,7 +121,7 @@ input {
 .total-comp {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 }
 .tooltip {
   position: relative;
@@ -160,14 +160,14 @@ input {
   visibility: visible;
 }
 
-.comp-header {
-  position: relative;
-}
-
 .comp-header .tooltip-container {
   position: absolute;
 }
 
 .tooltip-container {
   margin-left: 25px;
+}
+
+.verification-container {
+  margin-left: 20px;
 }
