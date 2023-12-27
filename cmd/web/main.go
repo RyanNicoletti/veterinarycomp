@@ -19,10 +19,17 @@ import (
 
 const portNumber string = ":8080"
 
-var app config.AppConfig
-var session *scs.SessionManager
-var infoLog *log.Logger
-var errorLog *log.Logger
+var (
+	app      config.AppConfig
+	session  *scs.SessionManager
+	infoLog  *log.Logger
+	errorLog *log.Logger
+	dbHost   = os.Getenv("VETCOMP_DB_HOST")
+	dbName   = os.Getenv("VETCOMP_DB_NAME")
+	dbUser   = os.Getenv("VETCOMP_DB_USER")
+	dbPass   = os.Getenv("VETCOMP_DB_PASSWORD")
+	dbPort   = os.Getenv("VETCOMP_DB_PORT")
+)
 
 func main() {
 	if _, err := os.Stat("./uploads"); os.IsNotExist(err) {
@@ -60,7 +67,7 @@ func main() {
 }
 
 func start() (*driver.DB, error) {
-	app.IsProduction = false
+	app.IsProduction = os.Getenv("VETCOMP_IS_PROD") == "true"
 
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -72,7 +79,8 @@ func start() (*driver.DB, error) {
 
 	log.Println("Connecting to database...")
 
-	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=vetcomp user=ryannicoletti password=")
+	dbConnectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", dbHost, dbPort, dbName, dbUser, dbPass)
+	db, err := driver.ConnectSQL(dbConnectionString)
 	if err != nil {
 		fmt.Println("Failed to connect to db, ggs...")
 	}
@@ -83,8 +91,8 @@ func start() (*driver.DB, error) {
 		log.Fatal("Failed to create template cache", err)
 	}
 	app.TemplateCache = tc
-	// change to true when in prod
-	app.UseCache = false
+	// in production we want to use cache, otherwise, dont need to
+	app.UseCache = os.Getenv("VETCOMP_IS_PROD") == "true"
 
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
