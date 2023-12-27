@@ -12,7 +12,7 @@ table {
 }
 th {
   font-size: 1.1rem;
-  background-color: #3498db;
+  background-color: rgb(200, 200, 200);
   color: black;
   font-weight: bold;
   padding: 10px;

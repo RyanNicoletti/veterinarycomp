@@ -129,6 +129,9 @@ func (repo *Repository) SearchComp(w http.ResponseWriter, r *http.Request) {
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "about.page.tmpl", &models.TemplateData{})
 }
+func (repo *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "contact.page.tmpl", &models.TemplateData{})
+}
 
 func (repo *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.tmpl", &models.TemplateData{Form: forms.NewForm(nil)})

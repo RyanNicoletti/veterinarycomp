@@ -5,14 +5,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vet Comp</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="/static/css/base-layout.css" />
   </head>
   <body>
     <div class="app-content">
       <header>
         <nav class="navbar">
-          <a href="/">Home</a>
-          <a href="/about">About</a>
+          <div class="nav-left">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="logo">VeterinaryComp</div>
+          <div class="nav-right">
+            <a></a>
+            <a></a>
+          </div>
         </nav>
       </header>
       <main>{{block "content" .}}{{ end }}</main>

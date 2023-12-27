@@ -26,6 +26,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/login", handlers.Repo.Login)
 	mux.Post("/login", handlers.Repo.PostLogin)
 	mux.Get("/logout", handlers.Repo.Logout)
+	mux.Get("/contact", handlers.Repo.Contact)
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(Auth)
 		mux.Use(Admin)
