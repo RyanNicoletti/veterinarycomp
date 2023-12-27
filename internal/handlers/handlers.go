@@ -284,7 +284,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 	}
 	form := forms.NewForm(r.PostForm)
 	form.TrimMoneyvalue("base-salary", "production", "sign-on-bonus")
-	form.Required("company-name", "location", "job-title", "base-salary")
+	form.Required("company-name", "location", "job-title")
 	signOnBonus, _ := form.StringToFloat("sign-on-bonus")
 	production, _ := form.StringToFloat("production")
 	yearsExperience, _ := form.StringToInt("years-experience")
@@ -297,9 +297,11 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 	var hourlyRate float64
 	var baseSalary float64
 	var totalComp float64
-	if isHourly == true {
+	if isHourly {
 		hourlyRate, _ = form.StringToFloat("hourly-rate")
+		form.Required("hourly-rate")
 	} else {
+		form.Required("base-salary")
 		baseSalary, _ = form.StringToFloat("base-salary")
 		totalComp = baseSalary + signOnBonus + production
 	}
