@@ -32,8 +32,6 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 	var tc map[string]*template.Template
 	if app.UseCache {
 		tc = app.TemplateCache
-		log.Println("pulling templates from template cache: ", tc)
-		log.Println(app.UseCache)
 	} else {
 		tc, _ = CreateTemplateCache()
 	}
@@ -61,7 +59,6 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 	pages, err := filepath.Glob("./templates/*.page.tmpl")
 	if err != nil {
-		log.Println("failed to get names of template files", err)
 		return cache, err
 	}
 	for _, page := range pages {
@@ -69,18 +66,15 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 		// ts = template set
 		ts, err := template.New(name).ParseFiles(page)
 		if err != nil {
-			log.Println("failed to parse template files", err)
 			return cache, err
 		}
 		layouts, err := filepath.Glob("./templates/*.layout.tmpl")
 		if err != nil {
-			log.Println("failed to get names of layout files", err)
 			return cache, err
 		}
 		if len(layouts) > 0 {
 			ts, err = ts.ParseGlob("./templates/*.layout.tmpl")
 			if err != nil {
-				log.Println("failed to parse layout templates", err)
 				return cache, err
 			}
 		}
