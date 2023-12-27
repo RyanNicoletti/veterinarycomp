@@ -32,6 +32,8 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 	var tc map[string]*template.Template
 	if app.UseCache {
 		tc = app.TemplateCache
+		log.Println("pulling templates from template cache: ", tc)
+		log.Println(app.UseCache)
 	} else {
 		tc, _ = CreateTemplateCache()
 	}
