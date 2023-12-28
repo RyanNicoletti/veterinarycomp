@@ -104,6 +104,7 @@
     </tr>
     {{ end }}
   </table>
+  {{if (gt .Data.page.TotalPage 1)}}
   <div class="pagination">
     {{if .IsSearchPerformed}}
     <ul class="pagination-list">
@@ -164,6 +165,7 @@
     </ul>
     {{ end }}
   </div>
+  {{ end }}
 </div>
 
 {{ end }}
