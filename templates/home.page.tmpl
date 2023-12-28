@@ -65,6 +65,7 @@
         {{if .IsHourly}}
         <div>
           Hourly Rate:
+          <span>$</span>
           <span id="formattedNumber">{{.HourlyRate}}</span>
           <div class="sign-on">
             Sign on bonus:
@@ -78,6 +79,7 @@
         {{else}}
         <div>
           Total Compensation:
+          <span>$</span>
           <span id="formattedNumber">{{.TotalCompensation}}</span>
           <div class="base-salary">
             Base salary:

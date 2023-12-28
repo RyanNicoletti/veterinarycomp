@@ -121,7 +121,7 @@
           </div>
         </div>
         <input type="text" inputmode="numeric" id="base-salary"
-        name="base-salary" required class="{{with .Form.Errors.Get "base-salary"}}
+        name="base-salary" class="{{with .Form.Errors.Get "base-salary"}}
         is-invalid {{ end }}" value="$ {{.Form.Get "base-salary"}}"
         oninput="formatMoneyNumbers(this)"/>
       </div>
@@ -137,7 +137,7 @@
           </div>
         </div>
         <input type="text" inputmode="numeric" id="hourly-rate"
-        name="hourly-rate" required class="{{with .Form.Errors.Get "hourly-rate"}}
+        name="hourly-rate" class="{{with .Form.Errors.Get "hourly-rate"}}
         is-invalid {{ end }}" value="$ {{.Form.Get "hourly-rate"}}"
         oninput="formatMoneyNumbers(this)"/> /hr
       </div>
@@ -231,12 +231,16 @@
       isHourlyRate = !isHourlyRate;
       const baseSalaryInput = document.getElementById('base-salary-input');
       const hourlyRateInput = document.getElementById('hourly-rate-input');
+      const hour = document.getElementById("hourly-rate")
+      const base = document.getElementById("base-salary")
       const baseSalaryLabel = document.querySelector('label[for="base-salary"]');
       const hourlyRateLabel = document.querySelector('label[for="hourly-rate"]');
       const toggleText = document.querySelector('.convert-to-hourly');
       const isHourlyInput = document.getElementById('is-hourly');
 
       if (isHourlyRate) {
+          base.value = ''
+          hour.value = ''
           baseSalaryInput.style.display = 'none';
           baseSalaryLabel.style.display = 'none';
           hourlyRateInput.style.display = 'block';
@@ -244,6 +248,8 @@
           toggleText.innerText = 'Convert to salaried pay';
           isHourlyInput.value = 'true';
       } else {
+        base.value = ''
+          hour.value = ''
           baseSalaryInput.style.display = 'block';
           baseSalaryLabel.style.display = 'block';
           hourlyRateInput.style.display = 'none';

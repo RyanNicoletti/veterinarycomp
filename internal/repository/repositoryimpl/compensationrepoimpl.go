@@ -135,13 +135,13 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 		return e
 	}
 
-	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, approved, date_created)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`
+	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, approved, is_hourly, hourly_rate, date_created)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`
 
 	_, err := dbRepo.DB.ExecContext(ctx, query,
 		comp.CompanyName, comp.JobTitle, comp.PracticeType, comp.BoardCertification, comp.Location,
 		comp.YearsExperience, comp.BaseSalary, comp.SignOnBonus, comp.Production, comp.TotalCompensation,
-		jsonDoc, comp.Verified, comp.Approved, comp.IsHourly, time.Now())
+		jsonDoc, comp.Verified, comp.Approved, comp.IsHourly, comp.HourlyRate, time.Now())
 
 	if err != nil {
 		return err
