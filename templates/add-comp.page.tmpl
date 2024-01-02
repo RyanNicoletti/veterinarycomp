@@ -20,7 +20,7 @@
         <label class="text-danger">{{.}}</label>
         {{ end }}
         <!-- prettier-ignore -->
-        <input required type="text" name="company-name" placeholder="Banfield Pet Hospital" 
+        <input type="text" name="company-name" placeholder="Banfield Pet Hospital" 
         class="{{with .Form.Errors.Get "company-name"}} is-invalid {{ end }}"
         value="{{ $comp.CompanyName }}" />
       </div>
@@ -30,7 +30,7 @@
           <label class="text-danger">{{.}}</label>
           {{ end }}
         </label>
-        <input type="text" id="location" name="location" required class="{{with .Form.Errors.Get "location"}}
+        <input type="text" id="location" name="location" placeholder="New York, NY" class="{{with .Form.Errors.Get "location"}}
         is-invalid {{ end }}" value="{{ $comp.Location }}" />
       </div>
     </fieldset>
@@ -42,8 +42,8 @@
           <label class="text-danger">{{.}}</label>
           {{ end }}
         </label>
-        <input required type="text" name="job-title" placeholder="Associate
-        Veterinarian" class="{{with .Form.Errors.Get "job-title"}} is-invalid
+        <input type="text" name="job-title" placeholder="Associate Veterinarian" 
+        class="{{with .Form.Errors.Get "job-title"}} is-invalid
         {{ end }}" value="{{ $comp.JobTitle }}"/>
       </div>
       <div class="form-group">
