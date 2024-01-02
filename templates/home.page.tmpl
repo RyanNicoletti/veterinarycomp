@@ -58,7 +58,11 @@
       </td>
       <td class="job-title">
         {{ .JobTitle }}
-        <div class="practice-type">({{ .PracticeType }})</div>
+        <div class="practice-type">
+          {{if .BoardCertification}} (Specialty: {{.BoardCertification}})
+          {{else}}
+          ({{.PracticeType}}) {{ end }}
+        </div>
       </td>
       <td class="experience">{{ .YearsExperience }}</td>
       <td class="total-comp">
