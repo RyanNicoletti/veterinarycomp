@@ -170,6 +170,10 @@ input {
 .comp-header {
   text-align: right;
 }
+.location-header,
+.type-of-practice-header {
+  font-size: 0.8em;
+}
 
 .tooltip-container {
   margin-left: 10px;

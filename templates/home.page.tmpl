@@ -28,11 +28,11 @@
     <tr>
       <th>
         Company/Hospital
-        <div>(location)</div>
+        <div class="location-header">(location)</div>
       </th>
       <th>
         Job Title
-        <div>(type of practice)</div>
+        <div class="type-of-practice-header">(type of practice)</div>
       </th>
       <th class="experience-header">Years of Experience</th>
       <th class="comp-header">
@@ -55,14 +55,14 @@
       <td class="company-name">
         {{ .CompanyName }}
         <br />
-        <div class="location">({{ .Location }})</div>
+        <div class="location">{{ .Location }}</div>
       </td>
       <td class="job-title">
         {{ .JobTitle }}
         <div class="practice-type">
-          {{if .BoardCertification}} (Specialty: {{.BoardCertification}})
+          {{if .BoardCertification}} Specialty: {{.BoardCertification}}
           {{else}}
-          ({{.PracticeType}}) {{ end }}
+          {{.PracticeType}} {{ end }}
         </div>
       </td>
       <td class="experience">{{ .YearsExperience }}</td>
