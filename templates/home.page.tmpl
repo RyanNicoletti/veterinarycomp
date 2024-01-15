@@ -48,6 +48,7 @@
           </div>
         </span>
       </th>
+      <th class="verification-header"></th>
     </tr>
     {{ range.Data.compensations }}
     <tr>
@@ -99,11 +100,11 @@
           </div>
         </div>
         {{ end }}
-        <div class="verification-container">
-          {{ if .Verified}}
-          <span>&#10004;</span>
-          {{ end }}
-        </div>
+      </td>
+      <td class="verification-container">
+        {{ if .Verified}}
+        <div>&#10004;</div>
+        {{ end }}
       </td>
     </tr>
     {{ end }}

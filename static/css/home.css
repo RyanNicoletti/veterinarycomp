@@ -5,6 +5,7 @@
 
 table {
   border-collapse: collapse;
+  table-layout: fixed;
   border: 2px solid rgb(200, 200, 200);
   letter-spacing: 1px;
   font-size: 0.8rem;
@@ -119,7 +120,7 @@ input {
 }
 
 .total-comp {
-  display: flex;
+  display: table-cell;
   align-items: center;
   justify-content: center;
 }
@@ -166,11 +167,14 @@ input {
 .comp-header .tooltip-container {
   position: relative;
 }
-
-.tooltip-container {
-  margin-left: 25px;
+.comp-header {
+  text-align: right;
 }
 
-.verification-container {
-  margin-left: 20px;
+.tooltip-container {
+  margin-left: 10px;
+}
+
+.verification-header {
+  width: 3%;
 }
