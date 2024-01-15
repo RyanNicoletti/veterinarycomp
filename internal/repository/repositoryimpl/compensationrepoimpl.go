@@ -165,6 +165,7 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 	defer rows.Close()
 	for rows.Next() {
 		var compensation = models.Compensation{}
+		var dbyte []byte
 		err := rows.Scan(&compensation.ID,
 			&compensation.CompanyName,
 			&compensation.JobTitle,
@@ -176,7 +177,7 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 			&compensation.SignOnBonus,
 			&compensation.Production,
 			&compensation.TotalCompensation,
-			&compensation.VerificationDocument,
+			&dbyte,
 			&compensation.Verified,
 			&compensation.Approved,
 			&compensation.IsHourly,
@@ -184,6 +185,16 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 			&compensation.CreatedAt)
 		if err != nil {
 			return compensations, err
+		}
+		if len(dbyte) > 0 {
+			var d *models.Document
+			err := json.Unmarshal(dbyte, &d)
+			if err != nil {
+				return nil, err
+			}
+			compensation.VerificationDocument = d
+		} else {
+			compensation.VerificationDocument = nil
 		}
 		compensations = append(compensations, compensation)
 	}
