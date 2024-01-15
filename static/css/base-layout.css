@@ -21,36 +21,33 @@ body {
 
 .navbar {
   background-color: deepskyblue;
-  /* position: fixed; */
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
   display: flex;
+  justify-content: flex-start;
+  position: relative;
+  height: 60px;
   align-items: center;
-  /* justify-content: space-between; */
   box-shadow: 0 0 25px 0 black;
 }
+
 .nav-left > a {
-  margin: 20px;
+  flex: 0 1 auto;
+  margin-left: 20px;
+  margin-right: auto;
   color: black;
   text-decoration: none;
   font-size: 1.3rem;
 }
-/*
-add if additional nav elements get added (login/sign up)
-.nav-right > a {
-  margin: 20px;
-  color: black;
-  text-decoration: none;
-  font-size: 1.3rem;
-} */
+.logo-container {
+  flex-grow: 0 1 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .logo {
   font-size: 2rem;
   font-family: "Playfair Display", serif;
   color: white;
-  margin-left: 500px;
 }
 
 .footer {
