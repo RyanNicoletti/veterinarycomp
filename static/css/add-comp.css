@@ -1,7 +1,6 @@
 .form-container {
   display: flex;
   justify-content: center;
-  margin: 150px auto;
 }
 fieldset {
   border: none;
