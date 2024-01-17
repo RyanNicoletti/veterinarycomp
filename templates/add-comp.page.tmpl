@@ -15,10 +15,11 @@
       <div class="fieldset-label">Hospital/Company Information</div>
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
       <div class="form-group">
-        <label for="company-name"></label>
-        Hospital/Company Name:{{with .Form.Errors.Get "company-name"}}
+        <label for="company-name">
+        Hospital/Company Name: {{with .Form.Errors.Get "company-name"}}
         <label class="text-danger">{{.}}</label>
         {{ end }}
+      </label>
         <!-- prettier-ignore -->
         <input type="text" name="company-name" placeholder="Banfield Pet Hospital" 
         class="{{with .Form.Errors.Get "company-name"}} is-invalid {{ end }}"
@@ -36,6 +37,22 @@
     </fieldset>
     <fieldset class="job-info">
       <div class="fieldset-label">Job Information</div>
+      <div class="form-group" id="is-vet">
+        <span>I am a: </span>
+        {{with .Form.Errors.Get "is-veterinarian"}}
+        <label class="text-danger">{{.}}</label>
+        {{end}}
+        <input type="radio" name="is-veterinarian" id="is-veterinarian" 
+        class="{{with .Form.Errors.Get "is-veterinarian"}} is-invalid {{end}}" 
+        value="true" />
+        <label for="is-veterinarian">Veterinarian</label>
+        <span></span>
+        <span></span>
+        <input type="radio" name="is-veterinarian" id="is-para"
+        class="{{with .Form.Errors.Get "is-veterinarian"}} is-invalid {{end}}" 
+        value="false" />
+        <label for="is-para">VA/VT</label>
+      </div>
       <div class="form-group">
         <label for="job-title">
           Title: {{with .Form.Errors.Get "job-title"}}

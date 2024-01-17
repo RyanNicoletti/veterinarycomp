@@ -18,7 +18,7 @@ form > div {
   margin-bottom: 20px;
 }
 
-input {
+input:not(#is-veterinarian, #is-para) {
   border-radius: 5px;
   margin: 6px 0 10px 0;
   background: #fff;
@@ -107,4 +107,14 @@ button {
 
 .convert-to-hourly:hover {
   text-decoration: underline;
+}
+
+#is-vet,
+#is-vet > * {
+  display: flex;
+  flex-direction: row;
+  margin-right: 5px;
+}
+#is-vet {
+  margin-bottom: 10px;
 }

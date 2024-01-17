@@ -58,3 +58,27 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.nav-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 60px;
+  background-color: deepskyblue;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-left {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+}

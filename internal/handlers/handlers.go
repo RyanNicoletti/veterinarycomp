@@ -284,16 +284,23 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 	}
 	form := forms.NewForm(r.PostForm)
 	form.TrimMoneyvalue("base-salary", "production", "sign-on-bonus", "hourly-rate")
-	form.Required("company-name", "location", "job-title")
+	form.Required("company-name", "location", "job-title", "is-veterinarian", "years-experience")
 	signOnBonus, _ := form.StringToFloat("sign-on-bonus")
 	production, _ := form.StringToFloat("production")
 	yearsExperience, _ := form.StringToInt("years-experience")
+
+	isVetStr := form.Get("is-veterinarian")
+	isVet, err := strconv.ParseBool(isVetStr)
+	if err != nil {
+		isVet = false
+	}
 
 	isHourlyStr := form.Get("is-hourly")
 	isHourly, err := strconv.ParseBool(isHourlyStr)
 	if err != nil {
 		isHourly = false
 	}
+
 	var hourlyRate float64
 	var baseSalary float64
 	var totalComp float64
@@ -352,6 +359,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 		IsHourly:             isHourly,
 		HourlyRate:           float32(hourlyRate),
 		CreatedAt:            time.Now(),
+		IsVeterinarian:       isVet,
 	}
 
 	if !form.Valid() {

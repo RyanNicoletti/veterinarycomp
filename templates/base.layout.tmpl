@@ -22,7 +22,13 @@
           <div class="logo-container">
             <div class="logo">VeterinaryComp</div>
           </div>
+          <div class="nav-toggle">&#9776;</div>
         </nav>
+        <div class="dropdown">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+        </div>
       </header>
       <main>{{block "content" .}}{{ end }}</main>
     </div>
@@ -33,3 +39,14 @@
 </html>
 
 {{ end }}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const navToggle = document.querySelector(".nav-toggle");
+    const dropdown = document.querySelector(".dropdown");
+
+    navToggle.addEventListener("click", function () {
+      dropdown.style.display =
+        dropdown.style.display === "flex" ? "none" : "flex";
+    });
+  });
+</script>
