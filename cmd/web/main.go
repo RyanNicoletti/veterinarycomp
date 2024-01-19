@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/pressly/goose"
 	"github.com/ryannicoletti/veterinarycomp/internal/config"
 	"github.com/ryannicoletti/veterinarycomp/internal/driver"
 	"github.com/ryannicoletti/veterinarycomp/internal/handlers"
@@ -80,7 +81,7 @@ func start() (*driver.DB, error) {
 	log.Println("Connecting to database...")
 
 	dbConnectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", dbHost, dbPort, dbName, dbUser, dbPass)
-	db, err := driver.ConnectSQL(dbConnectionString)
+	db, migrations, err := driver.ConnectSQL(dbConnectionString)
 	if err != nil {
 		fmt.Println("Failed to connect to db, ggs...")
 	}
@@ -98,6 +99,14 @@ func start() (*driver.DB, error) {
 	handlers.NewHandlers(repo)
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
+
+	if err := goose.SetDialect("postgres"); err != nil {
+		panic(err)
+	}
+
+	if err := goose.Up(migrations, "../../db/migrations"); err != nil {
+		panic(err)
+	}
 
 	return db, nil
 }
