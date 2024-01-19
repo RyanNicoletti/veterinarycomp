@@ -14,7 +14,7 @@
     <div class="app-content">
       <header>
         <nav class="navbar">
-          <div class="nav-left">
+          <div class="nav-left" id="nav-links">
             <a href="/">Home</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
@@ -22,12 +22,12 @@
           <div class="logo-container">
             <div class="logo">VeterinaryComp</div>
           </div>
-          <div class="nav-toggle">&#9776;</div>
-          <div class="dropdown">
+          <div class="dropdown" id="dropdown-links">
             <a href="/">Home</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
           </div>
+          <div class="burger" id="burger">&#9776;</div>
         </nav>
       </header>
       <main>{{block "content" .}}{{ end }}</main>
@@ -35,18 +35,17 @@
     <footer class="footer">
       <p>&copy; 2023 VeterinaryComp</p>
     </footer>
+    <script>
+      const burger = document.getElementById("burger");
+      const dropdownLinks = document.getElementById("dropdown-links");
+
+      burger.addEventListener("click", toggleNav);
+
+      function toggleNav() {
+        dropdownLinks.classList.toggle("show-dropdown");
+      }
+    </script>
   </body>
 </html>
 
 {{ end }}
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const navToggle = document.querySelector(".nav-toggle");
-    const dropdown = document.querySelector(".dropdown");
-
-    navToggle.addEventListener("click", function () {
-      dropdown.style.display =
-        window.getComputedStyle(dropdown).display === "flex" ? "none" : "flex";
-    });
-  });
-</script>
