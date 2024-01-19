@@ -104,7 +104,7 @@ func start() (*driver.DB, error) {
 		panic(err)
 	}
 
-	if err := goose.Up(migrations, "../../db/migrations"); err != nil {
+	if err := goose.Up(migrations, "./db/migrations"); err != nil {
 		panic(err)
 	}
 
