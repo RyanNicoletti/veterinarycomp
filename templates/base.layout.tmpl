@@ -45,7 +45,8 @@
     const dropdown = document.querySelector(".dropdown");
 
     navToggle.addEventListener("click", function () {
-      dropdown.style.display = "flex";
+      dropdown.style.display =
+        window.getComputedStyle(dropdown).display === "flex" ? "none" : "flex";
     });
   });
 </script>
