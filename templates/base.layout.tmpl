@@ -29,11 +29,6 @@
             <a href="/contact">Contact</a>
           </div>
         </nav>
-        <!-- <div class="dropdown">
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-        </div> -->
       </header>
       <main>{{block "content" .}}{{ end }}</main>
     </div>
@@ -50,8 +45,7 @@
     const dropdown = document.querySelector(".dropdown");
 
     navToggle.addEventListener("click", function () {
-      dropdown.style.display =
-        window.getComputedStyle(dropdown).display === "flex" ? "none" : "flex";
+      dropdown.style.display = "flex";
     });
   });
 </script>
