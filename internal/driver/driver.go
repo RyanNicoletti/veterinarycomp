@@ -18,7 +18,7 @@ const maxOpenDbConnections = 10
 const maxIdleDbConnections = 5
 const maxDbLifeTime = 5 * time.Minute
 
-func ConnectSQL(dsn string) (*DB, *sql.DB, error) {
+func ConnectSQL(dsn string) (*DB, error) {
 	db, err := NewDatabase(dsn)
 	if err != nil {
 		panic(err)
@@ -28,7 +28,7 @@ func ConnectSQL(dsn string) (*DB, *sql.DB, error) {
 	db.SetMaxOpenConns(maxOpenDbConnections)
 
 	dbConnector.SQL = db
-	return dbConnector, db, nil
+	return dbConnector, nil
 }
 
 func NewDatabase(dsn string) (*sql.DB, error) {

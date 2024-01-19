@@ -81,7 +81,7 @@ func start() (*driver.DB, error) {
 	log.Println("Connecting to database...")
 
 	dbConnectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", dbHost, dbPort, dbName, dbUser, dbPass)
-	db, migrations, err := driver.ConnectSQL(dbConnectionString)
+	db, err := driver.ConnectSQL(dbConnectionString)
 	if err != nil {
 		fmt.Println("Failed to connect to db, ggs...")
 	}
@@ -100,11 +100,16 @@ func start() (*driver.DB, error) {
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
+	// run migrations
+	sqlDb, err := driver.NewDatabase(dbConnectionString)
+	if err != nil {
+		log.Fatal("Failed to create db.")
+	}
 	if err := goose.SetDialect("postgres"); err != nil {
 		panic(err)
 	}
 
-	if err := goose.Up(migrations, "./db/migrations"); err != nil {
+	if err := goose.Up(sqlDb, "./db/migrations"); err != nil {
 		panic(err)
 	}
 
