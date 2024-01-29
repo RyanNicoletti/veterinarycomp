@@ -2,25 +2,26 @@
 {{define "content"}}
 <link rel="stylesheet" type="text/css" href="/static/css/contact.css" />
 <div class="contact-container">
-  <h2>Questions? Send us an email below.</h2>
+  <h2>Contact</h2>
+  <p class="contactp">
+    Have a question or suggestion about the site? Send us an
+    <a href="mailto:veterinarycompensation.com">email.</a>
+  </p>
+  <h2>Privacy Policy</h2>
+  <p>
+    By default, veterinarycomp.com does not require any user to submit their
+    personal information. Users are free to browse without submitting their
+    personal information. All information that is submitted is securely stored
+    by veterinarycomp.com. If proof of salary data is provided in the form of
+    any uplaoded documentation such an offer letter or pay stub, the document is
+    immediately deleted once reviewed. Veterinarycomp.com does not sell, trade,
+    or otherwise transfer data to outside parties.
+  </p>
 
-  <form
-    action="/mailto:veterinarycompensation@gmail.com"
-    method="post"
-    enctype="text/plain">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required />
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required />
-
-    <label for="subject">Subject:</label>
-    <input type="text" id="subject" name="subject" required />
-
-    <label for="message">Message:</label>
-    <textarea id="message" name="message" required></textarea>
-
-    <button type="submit">Submit</button>
-  </form>
+  <h2>Changes to this Privacy Policy</h2>
+  <p>
+    Any updates to this privacy policy will be posted on this page. Changes are
+    effective immediately after they are posted on this page.
+  </p>
 </div>
 {{ end }}
