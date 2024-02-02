@@ -30,7 +30,7 @@ func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations(limit, offset int)
 	// if we cant insert within 3 seconds, cancel the transaction
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	query := `select * from compensations WHERE approved = true order by date_created limit $1 offset $2`
+	query := `select * from compensations WHERE approved = true order by date_created DESC limit $1 offset $2`
 	rows, err := dbRepo.DB.QueryContext(ctx, query, limit, offset)
 	if err != nil {
 		return nil, err
@@ -159,7 +159,7 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 	query := `SELECT * FROM compensations
     WHERE (location ~* '\m` + locationOrHospital + `\M' OR company_name ~* '\m` + locationOrHospital + `\M')
 	AND approved = true
-	ORDER BY date_created limit $1 offset $2`
+	ORDER BY date_created DESC limit $1 offset $2`
 	rows, err := dbRepo.DB.QueryContext(ctx, query, rowPerPage, offset)
 	if err != nil {
 		return compensations, err
