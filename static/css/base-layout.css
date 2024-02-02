@@ -50,7 +50,7 @@ body {
   color: white;
 }
 
-.footer {
+.site-footer {
   flex-shrink: 0;
   height: 60px;
   background-color: deepskyblue;

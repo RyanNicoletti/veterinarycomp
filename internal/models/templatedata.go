@@ -8,7 +8,7 @@ import (
 type TemplateData struct {
 	Data              map[string]interface{}
 	IsSearchPerformed bool
-	FlashMessage      string
+	Flash             string
 	Warning           string
 	Error             string
 	CSRFToken         string

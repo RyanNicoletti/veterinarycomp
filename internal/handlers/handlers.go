@@ -81,6 +81,12 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data["page"] = paginationData
+
+	if _, ok := repo.App.Session.Get(r.Context(), "compensation").(models.Compensation); ok {
+		repo.App.Session.Put(r.Context(), "flash", "Thank you, your submission will be reviewed as soon as possible.")
+		repo.App.Session.Remove(r.Context(), "compensation")
+	}
+
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{Data: data})
 }
 
