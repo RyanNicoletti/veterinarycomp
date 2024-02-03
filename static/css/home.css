@@ -120,7 +120,9 @@ input {
 .experience-header {
   width: 10%;
 }
-
+.mobile-yoe {
+  display: none;
+}
 .ctooltip {
   position: relative;
   display: inline-block;
@@ -208,13 +210,20 @@ input {
     max-width: 88%;
   }
   th {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
+  }
+  .experience-header {
+    display: none;
+  }
+  .mobile-yoe {
+    display: table-cell;
+    width: 9%;
   }
   .company-name,
   .job-title,
   .total-comp,
   .experience {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
   }
   .practice-type,
   .location {
@@ -224,5 +233,13 @@ input {
   .sign-on,
   .production {
     font-size: 0.5em;
+  }
+  .table-actions {
+    display: flex;
+    flex-direction: column;
+  }
+  .search-components {
+    margin-top: 10px;
+    display: flex;
   }
 }

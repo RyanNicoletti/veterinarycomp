@@ -11,12 +11,14 @@
     </div>
     <form action="/search-comp" method="get">
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-      <input
-        type="text"
-        id="comp-search"
-        name="location-hospital"
-        placeholder="Search by location or hospital" />
-      <button type="submit">Search</button>
+      <div class="search-components">
+        <input
+          type="text"
+          id="comp-search"
+          name="location-hospital"
+          placeholder="Search by location or hospital" />
+        <button type="submit">Search</button>
+      </div>
       {{if .IsSearchPerformed}}
       <span id="clear-search" style="display: inline">
         <a href="/">clear search</a>
@@ -35,6 +37,7 @@
         <div class="type-of-practice-header">(type of practice)</div>
       </th>
       <th class="experience-header">Years of Experience</th>
+      <th class="mobile-yoe">YOE</th>
       <th class="comp-header">
         Compensation (USD)
         <span class="ctooltip-container">
