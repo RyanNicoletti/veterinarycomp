@@ -290,7 +290,7 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 	}
 	form := forms.NewForm(r.PostForm)
 	form.TrimMoneyvalue("base-salary", "production", "sign-on-bonus", "hourly-rate")
-	form.Required("company-name", "location", "job-title", "is-veterinarian", "years-experience")
+	form.Required("company-name", "job-title", "is-veterinarian", "years-experience", "country", "state")
 	signOnBonus, _ := form.StringToFloat("sign-on-bonus")
 	production, _ := form.StringToFloat("production")
 	yearsExperience, _ := form.StringToInt("years-experience")
@@ -366,6 +366,9 @@ func (repo *Repository) PostCompForm(w http.ResponseWriter, r *http.Request) {
 		HourlyRate:           float32(hourlyRate),
 		CreatedAt:            time.Now(),
 		IsVeterinarian:       isVet,
+		Country:              r.Form.Get("country"),
+		State:                r.Form.Get("state"),
+		City:                 r.Form.Get("city"),
 	}
 
 	if !form.Valid() {

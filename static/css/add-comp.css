@@ -118,3 +118,12 @@ button {
 #is-vet {
   margin-bottom: 10px;
 }
+
+@media (max-width: 500px) {
+  form {
+    width: 80vw;
+  }
+  input:not(#is-veterinarian, #is-para) {
+    width: 60%;
+  }
+}

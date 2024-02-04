@@ -23,6 +23,9 @@ type Compensation struct {
 	HourlyRate           float32
 	CreatedAt            time.Time
 	IsVeterinarian       bool
+	Country              string
+	State                string
+	City                 string
 }
 
 type Document struct {

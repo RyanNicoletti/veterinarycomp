@@ -57,7 +57,10 @@ func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations(limit, offset int)
 			&compensation.IsHourly,
 			&compensation.HourlyRate,
 			&compensation.CreatedAt,
-			&compensation.IsVeterinarian)
+			&compensation.IsVeterinarian,
+			&compensation.Country,
+			&compensation.State,
+			&compensation.City)
 		if err != nil {
 			return nil, err
 		}
@@ -108,7 +111,10 @@ func (dbRepo *pgCompensationRepo) GetAllUnapprovedCompensations(limit, offset in
 			&compensation.IsHourly,
 			&compensation.HourlyRate,
 			&compensation.CreatedAt,
-			&compensation.IsVeterinarian)
+			&compensation.IsVeterinarian,
+			&compensation.Country,
+			&compensation.State,
+			&compensation.City)
 		if err != nil {
 			return nil, err
 		}
@@ -137,13 +143,16 @@ func (dbRepo *pgCompensationRepo) InsertCompensation(comp models.Compensation) e
 		return e
 	}
 
-	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, approved, is_hourly, hourly_rate, date_created, is_veterinarian)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`
+	query := `INSERT INTO compensations (company_name, job_title, type_of_practice, board_certification, location, years_of_experience, base_salary, sign_on_bonus, production, total_comp, verification_document, verified, approved, is_hourly, hourly_rate, date_created, is_veterinarian, country, state, city)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
 
 	_, err := dbRepo.DB.ExecContext(ctx, query,
 		comp.CompanyName, comp.JobTitle, comp.PracticeType, comp.BoardCertification, comp.Location,
 		comp.YearsExperience, comp.BaseSalary, comp.SignOnBonus, comp.Production, comp.TotalCompensation,
-		jsonDoc, comp.Verified, comp.Approved, comp.IsHourly, comp.HourlyRate, time.Now(), comp.IsVeterinarian)
+		jsonDoc, comp.Verified, comp.Approved, comp.IsHourly, comp.HourlyRate, time.Now(), comp.IsVeterinarian,
+		&comp.Country,
+		&comp.State,
+		&comp.City)
 
 	if err != nil {
 		return err
@@ -185,7 +194,10 @@ func (dbRepo *pgCompensationRepo) SearchCompensation(locationOrHospital string, 
 			&compensation.IsHourly,
 			&compensation.HourlyRate,
 			&compensation.CreatedAt,
-			&compensation.IsVeterinarian)
+			&compensation.IsVeterinarian,
+			&compensation.Country,
+			&compensation.State,
+			&compensation.City)
 		if err != nil {
 			return compensations, err
 		}
@@ -313,7 +325,10 @@ func (dbRepo *pgCompensationRepo) GetCompensationByID(ID int) (models.Compensati
 		&c.IsHourly,
 		&c.HourlyRate,
 		&c.CreatedAt,
-		&c.IsVeterinarian)
+		&c.IsVeterinarian,
+		&c.Country,
+		&c.State,
+		&c.City)
 	if err != nil {
 		return c, err
 	}

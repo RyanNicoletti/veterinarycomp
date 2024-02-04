@@ -57,7 +57,15 @@
       <td class="company-name">
         {{ .CompanyName }}
         <br />
-        <div class="location">{{ .Location }}</div>
+        {{if ne .Country "United States"}}
+        <div class="location">{{ .State }}, {{.Country}}</div>
+        {{else}}
+        {{if .City}}
+        <div class="location">{{ .City }}, {{.State}}</div>
+        {{else}}
+        <div class="location">{{ .State }}</div>
+        {{ end }}
+        {{ end }}
       </td>
       <td class="job-title">
         {{ .JobTitle }}
