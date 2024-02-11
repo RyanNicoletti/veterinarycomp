@@ -129,6 +129,8 @@
           autoHeaderHeight: true,
         },
          pagination: true,
+         paginationPageSize: 10,
+         paginationPageSizeSelector: [10, 20, 30],
          includeHiddenColumnsInQuickFilter: true
       };
       gridApi = agGrid.createGrid(document.querySelector('#compGrid'), gridOptions)
