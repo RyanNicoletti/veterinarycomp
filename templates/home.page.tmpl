@@ -49,7 +49,8 @@
                 location = `${params.data.Country}, ${params.data.State}`;
             }
         }
-        return `<div>${location}</div>`;
+        return `<div>${params.data.CompanyName}</div>
+                <div>(${location})</div>`;
       }
 
       function compensationCellRenderer(params) {
@@ -79,18 +80,12 @@
       const gridOptions = {
         rowData: [],
         columnDefs: [
-           {
+            {
                 headerName: 'Company/Hospital',
                 field: 'CompanyName',
-                filter: true,
-                wrapText: true,
-                flex: 1
-            },
-            {
-                headerName: 'Location',
                 field: 'State',
-                field: 'City',
                 field: 'Country',
+                field: 'City',
                 filter: true,
                 wrapText: true,
                 cellRenderer: locationCellRenderer,
