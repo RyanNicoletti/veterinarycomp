@@ -3,7 +3,7 @@ package repository
 import "github.com/ryannicoletti/veterinarycomp/internal/models"
 
 type CompensationRepo interface {
-	GetAllApprovedCompensations(limit, offset int) ([]models.Compensation, error)
+	GetAllApprovedCompensations() ([]models.Compensation, error)
 	GetAllUnapprovedCompensations(limit, offset int) ([]models.Compensation, error)
 	GetCompensationByID(ID int) (models.Compensation, error)
 	DeleteCompensationByID(ID int) error

@@ -83,13 +83,25 @@
             {
                 headerName: 'Company/Hospital',
                 field: 'CompanyName',
-                field: 'State',
-                field: 'Country',
-                field: 'City',
                 filter: true,
                 wrapText: true,
                 cellRenderer: locationCellRenderer,
                 flex: 1
+            },
+            {
+              headerName: 'Hidden',
+              field: 'State',
+              hide: true,
+            },
+            {
+              headerName: 'Hidden',
+              field: 'City',
+              hide: true,
+            },
+            {
+              headerName: 'Hidden',
+              field: 'Country',
+              hide: true,
             },
             {
                 headerName: `Job Title`,
@@ -117,7 +129,9 @@
           autoHeaderHeight: true,
         },
          pagination: true,
+         includeHiddenColumnsInQuickFilter: true
       };
       gridApi = agGrid.createGrid(document.querySelector('#compGrid'), gridOptions)
       gridApi.setGridOption('rowData', gridData)
+      gridApi.redrawRows();
 </script>

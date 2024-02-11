@@ -26,12 +26,12 @@ func NewPostgresCompensationRepo(conn *sql.DB, a *config.AppConfig) repository.C
 	}
 }
 
-func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations(limit, offset int) ([]models.Compensation, error) {
+func (dbRepo *pgCompensationRepo) GetAllApprovedCompensations() ([]models.Compensation, error) {
 	// if we cant insert within 3 seconds, cancel the transaction
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	query := `select * from compensations WHERE approved = true order by date_created DESC limit $1 offset $2`
-	rows, err := dbRepo.DB.QueryContext(ctx, query, limit, offset)
+	query := `select * from compensations WHERE approved = true order by date_created DESC`
+	rows, err := dbRepo.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}

@@ -49,9 +49,8 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 		page = 1
 	}
 	rowPerPage := 10
-	offset := rowPerPage * (page - 1)
 
-	c, err := Repo.CompensationDBRepo.GetAllApprovedCompensations(rowPerPage, offset)
+	c, err := Repo.CompensationDBRepo.GetAllApprovedCompensations()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
