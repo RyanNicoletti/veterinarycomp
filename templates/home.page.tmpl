@@ -1,208 +1,128 @@
 {{template "base" .}}
 {{define "content"}}
 <link rel="stylesheet" type="text/css" href="/static/css/home.css" />
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-<div class="table-wrapper">
-  <div class="table-actions">
-    <div class="add-comp-button">
-      <a href="/add-comp"><button>Add Compensation</button></a>
-    </div>
-    <form action="/search-comp" method="get">
-      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-      <div class="search-components">
-        <input
-          type="text"
-          id="comp-search"
-          name="location-hospital"
-          placeholder="Search by location or hospital" />
-        <button type="submit">Search</button>
-      </div>
-      {{if .IsSearchPerformed}}
-      <span id="clear-search" style="display: inline">
-        <a href="/">clear search</a>
-      </span>
-      {{ end }}
-    </form>
+<div class="button-search-wrapper">
+  <div class="comp-filter">
+    <span>Search:</span>
+    <input
+      type="text"
+      id="filter-text-box"
+      placeholder="Filter..."
+      oninput="onFilterTextBoxChanged()" />
   </div>
-  <table class="comp-table">
-    <tr>
-      <th>
-        Company/Hospital
-        <div class="location-header">(location)</div>
-      </th>
-      <th>
-        Job Title
-        <div class="type-of-practice-header">(type of practice)</div>
-      </th>
-      <th class="experience-header">Years of Experience</th>
-      <th class="mobile-yoe">YOE</th>
-      <th class="comp-header">
-        Compensation (USD)
-        <span class="ctooltip-container">
-          <div class="ctooltip">
-            <a class="cquestion-icon" href="/about#verification">
-              <i class="fa fa-question-circle"></i>
-            </a>
-            <span class="ctooltiptext">
-              Check marks indicate verified compensations. Click to learn more.
-            </span>
-          </div>
-        </span>
-      </th>
-    </tr>
-    {{ range.Data.compensations }}
-    <tr>
-      <td class="company-name">
-        {{ .CompanyName }}
-        <br />
-        {{if ne .Country "United States"}}
-        <div class="location">{{ .State }}, {{.Country}}</div>
-        {{else}}
-        {{if .City}}
-        <div class="location">{{ .City }}, {{.State}}</div>
-        {{else}}
-        <div class="location">{{ .State }}</div>
-        {{ end }}
-        {{ end }}
-      </td>
-      <td class="job-title">
-        {{ .JobTitle }}
-        <div class="practice-type">
-          {{if .BoardCertification}} Specialty: {{.BoardCertification}}
-          {{else}}
-          {{.PracticeType}} {{ end }}
-        </div>
-      </td>
-      <td class="experience">{{ .YearsExperience }}</td>
-      <td class="total-comp">
-        {{if .IsHourly}}
-        <div class="comp-ver-wrapper">
-          <div>
-            Hourly Rate:
-            <span>$</span>
-            <span id="formattedNumber">{{.HourlyRate}}</span>
-            <div class="sign-on">
-              Sign on bonus:
-              <span id="formattedNumber">{{.SignOnBonus}}</span>
-            </div>
-            <div class="production">
-              Production:
-              <span id="formattedNumber">{{.Production}}</span>
-            </div>
-          </div>
-          <div>
-            {{ if .Verified}}
-            <div>&#10004;</div>
-            {{ end }}
-          </div>
-        </div>
-        {{else}}
-        <div class="comp-ver-wrapper">
-          <div>
-            Total Compensation:
-            <span>$</span>
-            <span id="formattedNumber">{{.TotalCompensation}}</span>
-            <div class="base-salary">
-              Base salary:
-              <span id="formattedNumber">{{.BaseSalary}}</span>
-            </div>
-            <div class="sign-on">
-              Sign on bonus:
-              <span id="formattedNumber">{{.SignOnBonus}}</span>
-            </div>
-            <div class="production">
-              Production:
-              <span id="formattedNumber">{{.Production}}</span>
-            </div>
-          </div>
-          <div>
-            {{ if .Verified}}
-            <div>&#10004;</div>
-            {{ end }}
-          </div>
-        </div>
-        {{ end }}
-      </td>
-    </tr>
-    {{ end }}
-  </table>
-  {{if (gt .Data.page.TotalPage 1)}}
-  <div class="pagination">
-    {{if .IsSearchPerformed}}
-    <ul class="pagination-list">
-      {{if (gt .Data.page.CurrentPage 1)}}
-      <li>
-        <a
-          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Previous }}">
-          {{.Data.page.Previous}}
-        </a>
-      </li>
-      {{
-        end
-      }}
-      <li>{{.Data.page.CurrentPage}}</li>
-      {{if (lt .Data.page.CurrentPage .Data.page.TotalPage)}}
-      <li>
-        <a
-          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page={{ .Data.page.Next }}">
-          {{.Data.page.Next}}
-        </a>
-      </li>
-      {{
-        end
-      }}
-      {{if and (eq .Data.page.CurrentPage 1) (gt .Data.page.TotalPage 2)}}
-      <li>
-        <a
-          href="/search-comp?location-hospital={{ .Data.locationOrHospital }}&page=3">
-          3
-        </a>
-      </li>
-      {{
-        end
-      }}
-    </ul>
-    {{else}}
-    <ul class="pagination-list">
-      {{if (gt .Data.page.CurrentPage 1)}}
-      <li>
-        <a href="/{{.Data.page.Previous}}">{{.Data.page.Previous}}</a>
-      </li>
-      {{
-        end
-      }}
-      <li>{{.Data.page.CurrentPage}}</li>
-      {{if (lt .Data.page.CurrentPage .Data.page.TotalPage)}}
-      <li>
-        <a href="/{{.Data.page.Next}}">{{.Data.page.Next}}</a>
-      </li>
-      {{
-        end
-      }}
-      {{if and (eq .Data.page.CurrentPage 1) (gt .Data.page.TotalPage 2)}}
-      <li><a href="/3">3</a></li>
-      {{
-        end
-      }}
-    </ul>
-    {{ end }}
+  <div class="add-comp-button">
+    <a href="/add-comp"><button>Add Compensation</button></a>
   </div>
-  {{ end }}
 </div>
-
+<div id="compGrid" class="ag-theme-quartz comp-table"></div>
 {{ end }}
 
 <script>
-  const formatWithCommas = (value) => {
-    return new Intl.NumberFormat("en-US").format(value);
-  };
-  document.addEventListener("DOMContentLoaded", function () {
-    const elements = document.querySelectorAll("#formattedNumber");
-    elements.forEach((element) => {
-      const value = parseFloat(element.textContent);
-      element.textContent = formatWithCommas(value);
-    });
-  });
+      const formatWithCommas = (value) => {
+        return new Intl.NumberFormat("en-US").format(value);
+      };
+
+      function jobTitleCellRenderer(params) {
+        return `<div>${params.data.JobTitle}</div>
+                <div>(${params.data.PracticeType})</div>`;
+      }
+
+      function onFilterTextBoxChanged() {
+        gridApi.setGridOption(
+          'quickFilterText',
+          document.getElementById('filter-text-box').value
+        );
+      }
+
+      function locationCellRenderer(params) {
+        let location = '';
+        if (params.data.Country === 'United States') {
+            if (params.data.City) {
+                location = `${params.data.City}, ${params.data.State}`;
+            } else {
+                location = params.data.State;
+            }
+        } else {
+            if (params.data.City) {
+                location = `${params.data.Country}, ${params.data.City}, ${params.data.State}`;
+            } else {
+                location = `${params.data.Country}, ${params.data.State}`;
+            }
+        }
+        return `<div>${location}</div>`;
+      }
+
+      function compensationCellRenderer(params) {
+      let content = '';
+
+      if (params.data.IsHourly) {
+          content += `<div class="total-comp">Hourly Rate: \$${formatWithCommas(params.data.HourlyRate)}</div>`;
+      } else {
+          content += `<div class="total-comp">Total Comp: \$${formatWithCommas(params.data.TotalCompensation)}</div>
+                      <div class="other-comp">Base Salary: \$${formatWithCommas(params.data.BaseSalary)}</div>`;
+      }
+
+      if (params.data.SignOnBonus !== 0) {
+          content += `<div class="other-comp">Sign on Bonus: \$${formatWithCommas(params.data.SignOnBonus)}</div>`;
+      }
+
+      if (params.data.Production !== 0) {
+          content += `<div class="other-comp">Production: \$${formatWithCommas(params.data.Production)}</div>`;
+      }
+
+      return content;
+  }
+
+
+      let gridData = {{.Data.compensations}}
+      let gridApi;
+      const gridOptions = {
+        rowData: [],
+        columnDefs: [
+           {
+                headerName: 'Company/Hospital',
+                field: 'CompanyName',
+                filter: true,
+                wrapText: true,
+                flex: 1
+            },
+            {
+                headerName: 'Location',
+                field: 'State',
+                field: 'City',
+                field: 'Country',
+                filter: true,
+                wrapText: true,
+                cellRenderer: locationCellRenderer,
+                flex: 1
+            },
+            {
+                headerName: `Job Title`,
+                field: 'JobTitle',
+                autoHeight: true,
+                wrapText: true,
+                cellRenderer: jobTitleCellRenderer,
+                flex: 1
+            },
+            {
+                headerName: 'Years of Experience',
+                field: 'YearsExperience',
+                width: 120
+            },
+            {
+                headerName: 'Compensation (USD)',
+                field: 'TotalCompensation',
+                autoHeight: true,
+                cellRenderer: compensationCellRenderer,
+                flex: 1
+            }
+        ],
+        defaultColDef: {
+          wrapHeaderText: true,
+          autoHeaderHeight: true,
+        },
+         pagination: true,
+      };
+      gridApi = agGrid.createGrid(document.querySelector('#compGrid'), gridOptions)
+      gridApi.setGridOption('rowData', gridData)
 </script>

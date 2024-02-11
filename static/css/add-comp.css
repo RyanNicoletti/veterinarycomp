@@ -44,7 +44,7 @@ button {
   margin-bottom: 10px;
 }
 .additional-salary-btn {
-  background-color: #4caf50;
+  background-color: #007bff;
   border: none;
   border-radius: 5px;
   color: white;
@@ -57,10 +57,10 @@ button {
   cursor: pointer;
 }
 .additional-salary-btn:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 .add-comp-submit-btn {
-  background-color: #008cba;
+  background-color: #007bff;
   border: none;
   border-radius: 5px;
   color: white;
@@ -73,7 +73,7 @@ button {
   cursor: pointer;
 }
 .add-comp-submit-btn:hover {
-  background-color: #0077a3;
+  background-color: #0056b3;
 }
 
 .text-danger {
